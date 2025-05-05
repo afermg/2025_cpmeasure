@@ -1,4 +1,3 @@
-#+TITLE: Morphological profiling for computer scientists
 #+bibliography: icml2025.bib
 # #+cite_export: natbib
 #+OPTIONS: toc:nil author:nil title:nil ^:nil date:nil
