@@ -1,0 +1,101 @@
+#+TITLE: Morphological profiling for computer scientists
+#+bibliography: icml2025.bib
+# #+cite_export: natbib
+#+OPTIONS: toc:nil author:nil title:nil ^:nil date:nil
+#+LATEX_CLASS: article-minimal
+#+LATEX_HEADER: \input{header.tex}
+
+#+begin_export latex
+\twocolumn[
+\icmltitle{Morphological profiling for computer scientists}
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2025
+% package.
+
+% List of affiliations: The first argument should be a (short)
+% identifier you will use later to specify author affiliations
+% Academic affiliations should list Department, University, City, Region, Country
+% Industry affiliations should list Company, City, Region, Country
+
+% You can specify symbols, otherwise they are numbered in order.
+% Ideally, you should not use this facility. Affiliations will be numbered
+% in order of appearance and this is the preferred way.
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Alan F. Munoz}{equal,broad}
+\icmlauthor{Tim Treis}{hh,broad}
+\icmlauthor{Shantanu Singh}{broad}
+\icmlauthor{Anne E. Carpenter}{broad}
+\end{icmlauthorlist}
+
+\icmlaffiliation{broad}{Broad Institute of MIT and Harvard}
+\icmlaffiliation{hh}{Helmholtz, Munich, Germany}
+
+\icmlcorrespondingauthor{Shantanu Singh}{shantanu@broadinstitute.org}
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{Machine Learning, ICML}
+
+\vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+% \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+
+#+end_export
+
+#+begin_export latex
+\begin{abstract}
+Cellprofiler importance and limitations.
+ Introduce a new library to automate CellProfiler measurements
+ Highlight accessibility for computational biologists and computer scientists
+\end{abstract}
+#+end_export
+
+* Introduction
+- Challenges in integrating CellProfiler features into workflows
+- Need for programmatic access to measurements
+
+* Problem & Motivation
+- Limitations of manual CellProfiler workflows
+- Target users: biologists seeking reproducibility, CS researchers needing APIs
+
+* Key Features
+- Support for four measurement types (1-4) 
+- Scikit-image style API for ease of use
+- Integration with Python ecosystems (NumPy, Pandas)
+
+* Usage Scenarios
+- Example: Automating intensity/shape measurements with synthetic data
+- Importing specific functions for tailored analysis
+
+* Case Studies
+- Biologist: Streamlining image analysis pipelines
+- CS researcher: Embedding measurements in ML workflows
+
+* Benefits
+- Reproducibility through code-based workflows
+- Reduced reliance on GUI interfaces
+- Intepretable features for morphological profiling
+- Trivial scaling up through threading
+- Beyond morphology screening: enabling new applications of CellProfiler (Tim's data)
+
+* Future Directions
+- Improve efficiency and expand capabilities
+
+* Conclusion
+- cp_measure as a bridge between CellProfiler and Python
+  - Call for community engagement and contributions
