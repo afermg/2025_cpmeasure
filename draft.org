@@ -2,7 +2,7 @@
 # #+cite_export: natbib
 #+OPTIONS: toc:nil author:nil title:nil ^:nil date:nil
 #+LATEX_CLASS: article-minimal
-#+LATEX_HEADER: \input{header.tex}
+#+LATEX_HEADER: \input{style/header.tex}
 
 #+begin_export latex
 \twocolumn[

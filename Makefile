@@ -20,7 +20,7 @@ all: pdf
 pdf: $(files_pdf)
 pub/pdf/%.pdf: %.org
 	@$(BATCH) --visit "$<" --funcall org-publish-pdf
-	@rm README.el
+	@rm export_files.el
 
 # html: $(files_html)
 # pub/html/%.html: %.org

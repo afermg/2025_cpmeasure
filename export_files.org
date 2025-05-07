@@ -38,7 +38,7 @@
        :base-extension "org"
        :publishing-directory ,pub-directory
        :publishing-function org-latex-publish-to-pdf
-       :exclude ".*publish.*.org\\|readme.org\\|qr.org\\|abstract.org"
+       :exclude ".*publish.*.org\\|readme.org\\|export_files.org"
        ;; :section-numbers 2
        :with-toc        nil
        :latex-class "article-minimal"
@@ -76,7 +76,7 @@ Remove the quote block
   (defun org-publish-pdf ()
     (progn
       (org-publish-project "publish-pdf" 'force)
-      (shell-command "mv ./latex.d pub/.; mv -f draft* *.sty ./pub/latex.d/.; mv ./pub/latex.d/draft*.org .")
+      ;; (shell-command "mv ./; mv -f draft* *.sty ./pub/latex.d/.; mv ./pub/latex.d/draft*.org .")
       ))
 #+END_SRC
 
