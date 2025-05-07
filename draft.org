@@ -24,14 +24,16 @@
 \icmlsetsymbol{equal}{*}
 
 \begin{icmlauthorlist}
-\icmlauthor{Alan F. Munoz}{equal,broad}
+\icmlauthor{Alan F. Munoz}{broad}
 \icmlauthor{Tim Treis}{hh,broad}
+\icmlauthor{Alexandr A. Kalinin}{broad}
+\icmlauthor{Shatavisha Dasgupta}{broad}
 \icmlauthor{Shantanu Singh}{broad}
 \icmlauthor{Anne E. Carpenter}{broad}
 \end{icmlauthorlist}
 
-\icmlaffiliation{broad}{Broad Institute of MIT and Harvard}
-\icmlaffiliation{hh}{Helmholtz, Munich, Germany}
+\icmlaffiliation{broad}{Broad Institute of MIT and Harvard, United States}
+\icmlaffiliation{hh}{Institute of Computational biology, Helmholtz Munich, Germany}
 
 \icmlcorrespondingauthor{Shantanu Singh}{shantanu@broadinstitute.org}
 
