@@ -7,8 +7,8 @@ BATCH=$(EMACS) --batch --no-init-file					\
          '((shell . t)))"   						\
   --eval "(setq org-confirm-babel-evaluate nil)"			\
   --eval '(setq starter-kit-dir default-directory)'			\
-  --eval '(org-babel-tangle-file "readme.org")'	              		\
-  --eval '(org-babel-load-file   "readme.org")'
+  --eval '(org-babel-tangle-file "export_files.org")'	              		\
+  --eval '(org-babel-load-file   "export_files.org")'
 
 files_org  = $(wildcard draft*.org)
 files_pdf  = $(addprefix pub/pdf/,$(files_org:.org=.pdf))
