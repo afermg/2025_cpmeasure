@@ -18,15 +18,17 @@ from tqdm import tqdm
 
 out_dir = Path("/datastore/alan/cp_measure/jump_subset")
 
-source_table = "~/Documents/broad/drafts/papers/2025_cp_measure/src/jump/test_set.csv"
+source_table = (
+    "https://zenodo.org/api/records/15359196/files/original_selection.csv/content"
+)
 id_col = "Perturbation"
 max_samples_per_group = 5
 
-items = tuple(pl.scan_csv(source_table).select(id_col).collect().to_series().to_list())
+items = pl.scan_csv(source_table).select(id_col).collect().to_series().to_list()
 
 locations = list(
-    Parallel(delayed(get_item_location_info)(x) for x in tqdm(items))
-)  # May take a couple of minutes
+    Parallel(n_jobs=-1)(delayed(get_item_location_info)(x) for x in tqdm(items))
+)  # May take a minute
 locations_df = pl.concat(locations, how="diagonal")
 
 subsample = locations_df.filter(
