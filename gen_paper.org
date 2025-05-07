@@ -1,0 +1,82 @@
+**** =org= LaTeX class
+#+BEGIN_SRC emacs-lisp
+  (unless (boundp 'org-latex-classes)
+    (setq org-latex-classes nil))
+
+   (add-to-list 'org-latex-classes
+           '("article-minimal"
+                   "\\documentclass{article}
+                    [NO-DEFAULT-PACKAGES]"
+                   ("\\section{%s}" . "\\subsection*{%s}")
+                   ("\\subsection{%s}" . "\\subsubsection*{%s}")
+                   ("\\subsubsection{%s}" . "\\subsubsubsection*{%s}")))
+#+END_SRC
+
+#+RESULTS:
+| cv | \documentclass[11pt]{article} |
+
+**** Set LaTeX command
+#+BEGIN_SRC emacs-lisp
+  (setq org-latex-pdf-process '("latexmk -xelatex -shell-escape -quiet %f"))
+#+END_SRC
+
+#+RESULTS:
+| latexmk -xelatex -shell-escape -quiet %f |
+*** Project definition
+#+BEGIN_SRC emacs-lisp
+
+    (setq this-directory (file-name-directory (or load-file-name buffer-file-name)))
+    (setq pub-directory (concat this-directory "pub/"))
+    (unless (boundp 'org-publish-project-alist)
+      (setq org-publish-project-alist nil))
+
+
+    (add-to-list
+     'org-publish-project-alist
+     `("publish-pdf"
+       :base-directory ,this-directory
+       :base-extension "org"
+       :publishing-directory ,pub-directory
+       :publishing-function org-latex-publish-to-pdf
+       :exclude ".*publish.*.org\\|readme.org\\|qr.org\\|abstract.org"
+       ;; :section-numbers 2
+       :with-toc        nil
+       :latex-class "article-minimal"
+       ;; :latex-header-extra ""
+       ))
+    
+  ;; (add-to-list 'load-path "~/.emacs.d/elpa")
+  (require 'package)
+     (add-to-list 'package-archives 
+    '("MELPA" .
+      "http://melpa.org/packages/"))
+
+  (package-initialize)
+  ;; (package-install 'citeproc)
+  ;;  (message "Load path is %s" load-path)
+  ;;  (require 'citeproc)
+  ;; (message "Load path now is %s" load-path)
+
+
+#+END_SRC
+
+
+**** Markup filter
+Remove the quote block
+#+BEGIN_SRC emacs-lisp
+  ;; (defun latex::cv-quote-filter (contents backend info)
+  ;;   (when (eq backend 'latex)
+  ;;     (replace-regexp-in-string "." "" contents)))
+  ;; (add-to-list 'org-export-filter-quote-block-functions
+  ;;              'latex::cv-quote-filter)
+#+END_SRC
+
+* Exporter functions
+#+BEGIN_SRC emacs-lisp
+  (defun org-publish-pdf ()
+    (progn
+      (org-publish-project "publish-pdf" 'force)
+      (shell-command "mv ./latex.d pub/.; mv -f draft* *.sty ./pub/latex.d/.; mv ./pub/latex.d/draft*.org .")
+      ))
+#+END_SRC
+

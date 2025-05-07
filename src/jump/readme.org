@@ -1,0 +1,5 @@
+#+TITLE: Generate a subset of JUMP to test cp_measure vs CellProfiler
+
+1. Use the data selected by Shata alongside jump_portrait to pull all the non-brighfield channels and create compressed tiff images.
+2. Upload these images to Zenodo so Shata can run a bare-bones CellProfiler pipeline with only the features.
+3. 
