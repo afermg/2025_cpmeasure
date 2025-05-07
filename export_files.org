@@ -45,13 +45,13 @@
        ;; :latex-header-extra ""
        ))
     
-  ;; (add-to-list 'load-path "~/.emacs.d/elpa")
-  (require 'package)
-     (add-to-list 'package-archives 
-    '("MELPA" .
-      "http://melpa.org/packages/"))
+ ; (add-to-list 'load-path "~/.emacs.d/elpa")
+ ; ;(require 'package)
+ ;    (add-to-list 'package-archives 
+ ;   '("MELPA" .
+ ;     "http://melpa.org/packages/"))
 
-  (package-initialize)
+;  (package-initialize)
   ;; (package-install 'citeproc)
   ;;  (message "Load path is %s" load-path)
   ;;  (require 'citeproc)
@@ -70,11 +70,16 @@ Remove the quote block
   ;; (add-to-list 'org-export-filter-quote-block-functions
   ;;              'latex::cv-quote-filter)
 #+END_SRC
+Org cite
+#+begin_src emacs-lisp
+(setq org-cite-global-bibliography '("bibliography.bib"))
+#+end_src
 
 * Exporter functions
 #+BEGIN_SRC emacs-lisp
   (defun org-publish-pdf ()
     (progn
+      (message "BIB %s" org-cite-global-bibliography)  
       (org-publish-project "publish-pdf" 'force)
       ;; (shell-command "mv ./; mv -f draft* *.sty ./pub/latex.d/.; mv ./pub/latex.d/draft*.org .")
       ))

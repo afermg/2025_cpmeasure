@@ -1,5 +1,6 @@
-#+bibliography: icml2025.bib
-# #+cite_export: natbib
+#+bibliography: bibliography.bib
+#+cite_export: natbib icml2025
+
 #+OPTIONS: toc:nil author:nil title:nil ^:nil date:nil
 #+LATEX_CLASS: article-minimal
 #+LATEX_HEADER: \input{style/header.tex}
