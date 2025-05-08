@@ -7,7 +7,7 @@
 
 #+begin_export latex
 \twocolumn[
-\icmltitle{Morphological profiling for computer scientists}
+\icmltitle{cp\_measure: Features for biological imaging made easy}
 
 % It is OKAY to include author information, even for blind
 % submissions: the style file will automatically remove it for you
@@ -29,6 +29,7 @@
 \icmlauthor{Tim Treis}{hh,broad}
 \icmlauthor{Alexandr A. Kalinin}{broad}
 \icmlauthor{Shatavisha Dasgupta}{broad}
+\icmlauthor{Fabian Theis}{hh}
 \icmlauthor{Shantanu Singh}{broad}
 \icmlauthor{Anne E. Carpenter}{broad}
 \end{icmlauthorlist}
@@ -67,43 +68,65 @@ Cellprofiler importance and limitations.
 \end{abstract}
 #+end_export
 
-* Morphological profiling in a nutshell
+* Introduction
 # What is morphological profiling
 The field of morphological profiling uses data from cell microscopy images to obtain biological insights and, among other applications, accelerate drug discovery aided by machine and deep learning approaches in addition to traditional statistical methods.
 
-# Current limitations of the field
-A small subset of the features is provided by scikit-image, but this is greatly limited and cannot be reliably compared to the existing body of work that used CellProfiler to obtain the measurements. The other big problem of CellProfiler is its dependency on human interaction at many steps of the analysis, opening the door to human mistakes and hindering analyses reproducibility.
-
+** CellProfiler's hegemony in biological image analysis
 # What is CP
 The most widely-used software to process biological imaging data is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its target users are biologists with limited programmatic expertise. The accessibility provided by manually implemented workflows comes at the cost of reducing its suitability for automated analyses and the composition of more complex pipelines.
 
 # Why is it not sufficient
-Advanced pipelines that combine multiple different tools require more than standard CellProfiler. Its focus on manual analysis workflows that caters to answer specific biological questions, prevents it from being easy to use in more general and high throughput contexts. Additionally, it has a large number dependencies across the Python and Java languages, increasing the friction and potential blocks when trying to use it side by side with other tools. While containers alleviate this problem to some degree, they in turn introduce other problems, complexity among them.
+Cellprofiler entails a higher degree of friction for composite pipelines that orchestrate multiple tools. Its focus on manually-defined workflows adjusted for specific use-cases makes it less suitable for high throughput contexts. Another limitation is the number and kind of dependencies. It depends on libraries from both Python and Java languages, thus greatly increasing the friction during set up and reducing its portability. While containers alleviate this problem to some degree, they in turn introduce other problems, complexity among them.
 
+# Current limitations of the field
+A small subset of the features in CellProfiler is provided by scikit-image, but this is greatly limited and cannot be reliably compared to the existing body of work that used CellProfiler to obtain the measurements. The other big problem of CellProfiler is its dependency on human interaction at many steps of the analysis, opening the door to human mistakes and hindering analyses reproducibility.
+
+# CP is limited as  pluggable tool
 A CellProfiler-build pipeline requires cannot easily integrate with others. Its existing plug-in system is inaccessible for most users and has strong limitations. Building automated pipelines that contain CellProfiler and integrating tools within its components are time and effort-consuming challenges.
 
 # Why do we need something like cp measure
-In this space there is a vacuum for a software library that covers the generalistic and high throughput use-cases for which CellProfiler is inadequate. Distributed CellProfiler would cover this case if not for its cloud-only approach and dependency on preconfigured pipelines, as well as its limited debugging capabilities.
+In this space there is a vacuum for a software library that covers the generalistic and high throughput use-cases for which CellProfiler is inadequate. Distributed CellProfiler would cover this case if not for its cloud-only approach and dependency on preconfigured pipelines, as well as its limited debugging capabilities [cite:@weisbartDistributedSomethingScriptsLeverage2023].
 
 # Existing attempts
-Other recent software has been published aiming to fill this unoccupied niche [cite:@comoletHighlyEfficientScalable2024;@spacrEinarOlafssonSpacr2025], but they carry multiple issues: First, their features have completely independent implementations from the original ones, thus are not guaranteed to reproduce existing results. Additionally, their implementations do not provide modularity and scalability. In the case of ScaleFex, similarly to Distributed CellProfiler, its main use-case is cloud services.
+Other recent software has been published aiming to fill this unoccupied niche, but their solutions are unsuitable for practical usage at scale: First, their features have completely independent implementations from the original ones, thus are not guaranteed to reproduce existing results and the biological interpretations may be different from the current field standard. Additionally, their implementations are not modular nor scale well upon increases to the data size. Some of them, akin to Distributed CellProfiler, are based on main use-case is cloud services .
 
-** The role of engineered features in the era of Deep Learning
+** Engineered features in the era of Deep Learning
+The unprecedented evolution of deep learning methods in recent years has made available many different ways to process imaging data. Nevertheless, these are limited in their capacity to provide biological interpretation [cite:@moenDeepLearningCellular2019].
+
 # Directly mathematically interpretable
-# DL is not always better-performing
-# DL requires (ok, requires may be too strong here!) training on a given dataset and appropriate samples may not be available for training and it’s a pain
-# DL needs interpretation (and engineered features can help in that process?)
-While deep learning embeddings of images have become available in recent years, these are limited in their capacity to provide biological interpretability [TODO: add citation https://www.nature.com/articles/s41592-019-0403-1].
-# Importance of these features for ML/DL pipelines in cell microscopy data
-# Target users: biologists seeking automation and reproducibility, CS/Data scientists needing APIs to build their pipelines
+Unlike with deep learning-based features, whose interpretation requires complex methods such as counterfactuals or attention maps, most of the engineered features have a mathematical definition that is vastly simpler to translate into biological insights.
 
-* Measurement library as a solution to scale-up interpretable biological image analysis
+# DL is not always better-performing
+Engineered features can also outperform deep learning ones under some conditions [cite:@tangMorphologicalProfilingDrug2024]. Though deep learning features are more likely to improve in the coming years
+
+# DL requires training on a given dataset and appropriate samples may not be available for training and it’s a pain
+It also has a higher barrier of entry, since most models require annotating data for training and testing. Even new foundational models do not generalise well for out-of-distribution data.
+
+# Target users: biologists seeking automation and reproducibility, CS/Data scientists needing APIs to build their pipelines
+The main target users of such a tool would be biologists in need of automation and reproducibility, as well as computer and data scientists that want to dive into the field of biological imaging.
+
+# Importance of these features for ML/DL pipelines in cell microscopy data
+As a whole, there is still a role to be played for engineered features. The community is missing a generalist tool that converts images and masks into vectors in an automated fashion and portable across fields. It serves as complementary approach deep learning methods.
+
+* cp_measure as a step towards modular image analysis frameworks
 # Measurement parity with CellProfiler extending from original implementation
+With cp_measure we recapitulated all features used in the vast majority of experiments: One object and one imaging channel (e.g., intensity), one object and multiple channels (e.g., Manders correlation) and multiple objects (e.g., number of neighbors).
+  
+# Extensibilty
+cp_measure's code base branches off CellProfiler's by separating the user interface and the orchestration logic from the math. It improves reusability, testability and its makes it possible for more people to access and improve its internals in the future. It aims to be a stepping stone to increased extensibility and maintainability.
+
 # Scikit-image style API for ease of use
+Our library aims to remain consistent with the current scientific python ecosystem. The main interface matches that of the widely-used scikit-image [cite:@waltScikitimageImageProcessing2014]. This greatly reduces the effort needed to integrate it in existing workflows and tools.
+  
+By isolating and cleaning the implemented mathematics of CellProfiler we aim to produce a Increasing accessibility for computer and data scientists to leverage the decade and a half of existing features.
+
 # Faster than CellProfiler (May require brief benchmarking)
-- Recapitulate all feature types: Single, multi-image and multi-object features.
-- Scikit-image style
-- Faster than CellProfiler (TODO add benchmark)
+When comparing the equivalent pipelines, cp_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
+
+#  The goal is to import it back into CP eventually anyway, so this feels very clean
+ 
+# "Proposals for better workflows or incentives for open-source development and maintenance in ML"
 
 ** Usage scenarios
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
@@ -114,7 +137,6 @@ While deep learning embeddings of images have become available in recent years, 
 # Reproducibility through code-based workflows
 # Reduced reliance on GUI interfaces
 # Interpretable features for morphological profiling
-
 # cp_measure as an accessible way to obtain single-object measurements for microscopy measurements within Python
 # Engineered features complement deep learning and together provide a better mechanistic understanding of the underlying biology.
 # It complements generalist tools like Cellpose.
@@ -122,5 +144,8 @@ While deep learning embeddings of images have become available in recent years, 
 
 * Future work
 - Contributing back to the CellProfiler code base
+- Stepping stone that opens multiple doors:
+  - Performing optimisation speed ups, potentially using GPU and/or numba
+  - Adding new measurements that came to be useful in the past 10 years
 
 #+print_bibliography: 
