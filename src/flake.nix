@@ -21,7 +21,8 @@
             };
 
             libList = [
-                pkgs.stdenv.cc.cc
+              pkgs.stdenv.cc.cc
+              pkgs.libz
               ];
           in
           with pkgs;
