@@ -117,3 +117,8 @@ dfs = list(
 )
 
 concat = pl.concat(dfs)
+from xgboost import XGBClassifier
+
+bst = XGBClassifier(
+    n_estimators=2, max_depth=2, learning_rate=1, objective="binary:logistic"
+)

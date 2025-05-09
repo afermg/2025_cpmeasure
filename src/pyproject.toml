@@ -1,0 +1,17 @@
+[project]
+name = "cp_measure_codeml"
+version = "0.1.0"
+description = "Code to reproduce figures for submission."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "cp-measure>=0.1.10",
+    "joblib>=1.5.0",
+    "jump-portrait>=0.0.27",
+    "opencv-python-headless>=4.11.0.86",
+    "pillow>=11.2.1",
+    "polars>=1.29.0",
+    "scikit-learn>=1.6.1",
+    "tqdm>=4.67.1",
+    "xgboost>=3.0.0",
+]
