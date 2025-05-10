@@ -1,14 +1,27 @@
+#!/usr/bin/env python
 from itertools import chain
 from pathlib import Path
 
+import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
+import polars.selectors as cs
+import seaborn as sns
 from cp_measure.bulk import get_core_measurements
 from joblib import Parallel, delayed
 from pooch import Untar, retrieve
 from skimage.io import imread
+from sklearn.model_selection import train_test_split
+from xgboost import XGBClassifier
 
 MEASUREMENTS = get_core_measurements()
+
+overwrite = False
+profiles_fpath = Path("tmp.parquet")
+fig_fpath = Path(".") / ".." / ".." / "figs" / "axon3d.svg"
+fig_fpath.parent.mkdir(parents=True, exist_ok=True)
+
+seed = 42
 
 
 def fix_non_continuous_labels(labels_redz: np.ndarray) -> np.ndarray:
@@ -95,30 +108,76 @@ retrieved = list(
         for url, h in url_hash.items()
     )
 )
-dir_files = {
-    x: y
-    for x, y in zip((Path(url).name.split(".")[0] for url in url_hash), retrieved)
-    if x.endswith("_masks")  # Optional but makes the next step faster
-}
 
+if not profiles_fpath.exists() or overwrite:
+    dir_files = {
+        x: y
+        for x, y in zip((Path(url).name.split(".")[0] for url in url_hash), retrieved)
+        if x.endswith("_masks")  # Optional but makes the next step faster
+    }
 
-pairs = [
-    x
-    for x in Parallel(n_jobs=-1)(
-        delayed(map_mask_to_image)(x) for x in chain(*dir_files.values())
+    pairs = [
+        x
+        for x in Parallel(n_jobs=-1)(
+            delayed(map_mask_to_image)(x) for x in chain(*dir_files.values())
+        )
+        if x is not None  # Ignore pngs
+    ]
+
+    dfs = list(
+        Parallel(n_jobs=-1)(
+            delayed(apply_measurements)(m_path, i_path) for m_path, i_path in pairs
+        )
     )
-    if x is not None  # Ignore pngs
-]
 
-dfs = list(
-    Parallel(n_jobs=-1)(
-        delayed(apply_measurements)(m_path, i_path) for m_path, i_path in pairs
-    )
-)
+    profiles = pl.concat(dfs)
+    profiles.write_parquet(profiles_fpath)
+else:
+    profiles = pl.read_parquet(profiles_fpath)
 
-concat = pl.concat(dfs)
-from xgboost import XGBClassifier
+# %% Train and run an XGB Classifier
+target_feature = "day"
 
 bst = XGBClassifier(
-    n_estimators=2, max_depth=2, learning_rate=1, objective="binary:logistic"
+    n_estimators=5,
+    max_depth=3,
+    learning_rate=1,
+    objective="binary:logistic",
+    seed=seed,
 )
+
+
+meta = profiles.select(cs.by_dtype(pl.String))
+cc = meta.group_by("stem").agg(
+    pl.len().alias("ncells"), pl.first("pert"), pl.first("day")
+)
+
+
+with_cc = (
+    profiles.select(~cs.by_dtype(pl.String), "stem").join(cc, on="stem").sort(by="stem")
+)
+mapper = {k: i for i, k in enumerate(with_cc[target_feature].unique().sort())}
+target = with_cc.with_columns(pl.col(target_feature).replace_strict(mapper))[
+    target_feature
+]
+data = with_cc.select(~cs.by_dtype(pl.String))
+
+X_train, X_test, y_train, y_test = train_test_split(
+    data, target, test_size=0.1, random_state=seed
+)
+bst.fit(X_train, y_train)
+preds = bst.predict(X_test)
+test_acc = (preds & np.array(y_test)).sum() / len(y_test)
+print(test_acc)
+
+# %% Plot
+plt.close()
+sns.violinplot(
+    data=with_cc,
+    y="ncells",
+    x=("pert", "day")[~("pert", "day").index(target_feature)],
+    split=True,
+    hue=target_feature,
+    palette="RdBu",
+)
+plt.savefig(fig_fpath)
