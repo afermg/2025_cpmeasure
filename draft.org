@@ -4,6 +4,7 @@
 #+OPTIONS: toc:nil author:nil title:nil ^:nil date:nil
 #+LATEX_CLASS: article-minimal
 #+LATEX_HEADER: \input{style/header.tex}
+#+LATEX_HEADER: \usepackage[inkscapelatex=false]{svg}
 
 #+begin_export latex
 \twocolumn[
@@ -77,7 +78,7 @@ The field of morphological profiling uses data from cell microscopy images to ob
 The most widely-used software to process biological imaging data is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its target users are biologists with limited programmatic expertise. The accessibility provided by manually implemented workflows comes at the cost of reducing its suitability for automated analyses and the composition of more complex pipelines.
 
 # Why is it not sufficient
-Cellprofiler entails a higher degree of friction for composite pipelines that orchestrate multiple tools. Its focus on manually-defined workflows adjusted for specific use-cases makes it less suitable for high throughput contexts. Another limitation is the number and kind of dependencies. It depends on libraries from both Python and Java languages, thus greatly increasing the friction during set up and reducing its portability. While containers alleviate this problem to some degree, they in turn introduce other problems, complexity among them.
+The usage of Cellprofiler entails a higher degree of friction for composite pipelines that orchestrate multiple tools. Its focus on manually-defined workflows adjusted for specific use-cases makes it less suitable for many high throughput analyses. Another limitation is the number and kind of dependencies. It depends on libraries from both Python and Java languages, thus greatly increasing the friction during set up and reducing its portability. While containers alleviate this problem to some degree, they in turn introduce other problems, complexity among them.
 
 # Current limitations of the field
 A small subset of the features in CellProfiler is provided by scikit-image, but this is greatly limited and cannot be reliably compared to the existing body of work that used CellProfiler to obtain the measurements. The other big problem of CellProfiler is its dependency on human interaction at many steps of the analysis, opening the door to human mistakes and hindering analyses reproducibility.
@@ -119,7 +120,7 @@ cp_measure's code base branches off CellProfiler's by separating the user interf
 # Scikit-image style API for ease of use
 Our library aims to remain consistent with the current scientific python ecosystem. The main interface matches that of the widely-used scikit-image [cite:@waltScikitimageImageProcessing2014]. This greatly reduces the effort needed to integrate it in existing workflows and tools.
   
-By isolating and cleaning the implemented mathematics of CellProfiler we aim to produce a Increasing accessibility for computer and data scientists to leverage the decade and a half of existing features.
+By isolating and cleaning the implemented mathematics of CellProfiler we aim to make its featurization methods more accessible to computer and data scientists, leveraging the decade and a half of existing features. 
 
 # Faster than CellProfiler (May require brief benchmarking)
 When comparing the equivalent pipelines, cp_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
@@ -129,9 +130,27 @@ When comparing the equivalent pipelines, cp_measure's minimal overhead results i
 # "Proposals for better workflows or incentives for open-source development and maintenance in ML"
 
 ** Usage scenarios
+# Overview of usage
+We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [TODO JUMP-CP citation]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability.
+
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
+
+We use cp_measure to process data from the JUMP dataset, containing more than 130,000 chemical and genetic perturbations. First, we curated a set of perturbations that generate Then we demonstrate that we recapitulate the CellProfiler features.
+
+#+CAPTION: Comparison of CellProfiler and cp_measure.
+#+NAME: fig:cp_vs_cpmeasure
+[[./figs/axon3d.svg]]
+
 # Extracting features from 3D data (Alex's data, Alan's short analysis)
+As a proof of concept, we showcased that cp_measure can be used in a workflow to train a classifier for cell populations. We used it to process 433 3D images of astrocytes containing 831 cells []. Then we trained a Gradient Boosting classifier to identify which day. With this we identified which features distinguish cells on the later samples and distinguish sub-populations.
+#+CAPTION: Astrocytes example.
+#+NAME: fig:astrocytes
+[[./figs/axon3d.svg]]
+
 # Beyond morphology screening: Spatial transcriptomics data (Tim's data and analysis)
+#+CAPTION: Spatial omics analysis
+#+NAME: fig:spatial_omics
+[[./figs/axon3d.svg]]
 
 * Conclusion/Discussion
 # Reproducibility through code-based workflows
@@ -143,9 +162,11 @@ When comparing the equivalent pipelines, cp_measure's minimal overhead results i
 # If integrated back to CellProfiler, it will enable the design and implementation of new measurements when necessary.
 
 * Future work
-- Contributing back to the CellProfiler code base
-- Stepping stone that opens multiple doors:
-  - Performing optimisation speed ups, potentially using GPU and/or numba
+There are multiple paths to improve and expand the functionality of cp_measure. The first and most obvious is to integrate its measurements back to CellProfiler library. This would ensure that the results from pipelines built with either tool will be comparable in the future, while also providing the opportunity of formalizing the programmatic interface --- inputs and outputs --- of measurements.
+
+In addition to the reintegration, adding further tests would guarantee mathematical correctness under all possible edge cases. Having this comprehensive tests suite would in turn open the door to further speed ups in multiple ways: First of all, optimizing the measurements that consume the most time, starting with object granularity (~80% of the time). Additionally, it is possible to implement measurements using numba for just-in-time compiling and/or adding GPU support [TODO cite numba].
+
+cp_measure can be the place to develop and distribute novel measurements. 
   - Adding new measurements that came to be useful in the past 10 years
 
 #+print_bibliography: 
