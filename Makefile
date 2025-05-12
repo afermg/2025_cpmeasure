@@ -38,5 +38,5 @@ pub/pdf/%.pdf: %.org
 # 	@echo "NOTICE: HTML documentation published"
 
 clean:
-	@rm -f *.elc *.aux *.tex *.pdf *~ *.sty
+	@rm -f *.elc *.aux *.tex *.pdf *~ *.sty *.bbl
 	@rm -rf pub

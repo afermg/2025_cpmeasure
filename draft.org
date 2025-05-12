@@ -122,12 +122,12 @@ With cp_measure we recapitulated all features used in the vast majority of exper
 [[./figs/cpmeasure_overview.svg]]
 
 # Extensibilty
-The cp_measure's code base branches off CellProfiler's by separating the user interface and the orchestration logic from the math. It improves reusability, testability and its makes it possible for more people to access and improve its internals in the future. It aims to be a stepping stone to increased extensibility and maintainability.
+The cp_measure's code base was based on CellProfiler's, but we removed the sections of the code that are unnecessary for programmatic usage, thus separating the actual functional components from the orchestration logic. It improves reusability, testability and its makes it possible for more people to access and improve its internals in the future. It aims to be a stepping stone to increased extensibility and maintainability.
 
 # Scikit-image style API for ease of use
 Our library aims to remain consistent with the current scientific python ecosystem. The main interface matches that of the widely-used scikit-image [cite:@waltScikitimageImageProcessing2014]. This greatly reduces the effort needed to integrate it in existing workflows and tools.
   
-By isolating and cleaning the implemented mathematics of CellProfiler we aim to make the measurement methods more accessible to computer and data scientists, leveraging the decade and a half of existing features. 
+By isolating and cleaning the implemented mathematics of CellProfiler we aim to make the measurement methods more accessible to computer and data scientists, while still leveraging the decade and a half of existing features that are present in numerous datasets, maintaining a higher degree of compatibility. To retain this compatibility in the long term requires contributing this changes back into CellProfiler, be it directly or as a dependency.
 
 # Faster than CellProfiler (May require brief benchmarking)
 When comparing the equivalent pipelines, cp_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
@@ -175,7 +175,7 @@ Reducing our reliance in graphical interfaces brings about better scaling capabi
 The biologically interpretable features provided by cp_measure complement deep learning ones and offer a better mechanistic understanding of the underlying biology. When used in tandem with generalist tools it helps compose larger and faster pipelines.
   
 # Other adjacent fields
-These measurements have already been used in non-biological context, thus cp_measure metrics also benefit other scientific fields beyond morphological profiling.
+These measurements have already been used in non-biological contexts [TODO cite https://www.sciencedirect.com/science/article/pii/S0013935125001859], thus cp_measure metrics also benefit other scientific fields beyond morphological profiling.
 # cp_measure as an accessible way to obtain single-object measurements for microscopy measurements within Python
 # Engineered features complement deep learning and together provide a better mechanistic understanding of the underlying biology.
 
@@ -184,13 +184,13 @@ There are multiple paths to improve and expand the functionality of cp_measure. 
 
 Developing a comprehensive tests suite would guarantee mathematical correctness under the possible edge cases that may be encountered when dealing with new data. This test suite in turn would in turn open the door to further speed-ups in multiple ways: Firstly, optimizing the measurements that consume the most time, starting with object granularity (~80% of the time). Additionally, it is possible to implement measurements using numba for just-in-time compiling and/or adding GPU support [TODO cite numba].
 
-We envision cp_measure can be the place to develop and distribute new measurements. While CellProfiler's measurements are widely used in bioimaging studies, the existing palette of measurements could be further extended to cover novel use-cases brought upon by novel developments in imaging acquisition devices and methods. Working with the community to further the number of measurements to better match the current questions scientists pose to imaging data.
+We plan to add other quality-of-life features. First, add a wrapper to call measurements on the fly, analogous to scikit-image's regionprops function. Secondly, a list of essential measurements for use-cases where speed is more important than using all the features. By lowering the barrier of effort required to integrate cp_measure into existing pipelines these 
 
-There are a couple of other features that would be useful for the community: First, a wrapper to call measurements on the fly, similar to scikit-image's regionprops. Second, a list of essential measurements for use-cases where speed is more important than using all the features.
+Long-term, we envision cp_measure can be the place to develop and distribute new measurements. While CellProfiler's measurements are widely used in bioimaging studies, the existing palette of measurements could be further extended to cover novel use-cases brought upon by novel developments in imaging acquisition devices and methods. Working with the community to further the number of measurements to better match the current questions scientists pose to imaging data.
 
 * Methods
 ** Data and software
-The code for cp_measure is available on https://github.com/afermg/cp_measure. All code to reproduce the analyses and figures, alongside links to the original data, is available on the Github repository https://github.com/afermg/2025_cpmeasure/. The datasets we produced for this work are available on Zenodo: She go to dance.
+The code for cp_measure is available on https://github.com/afermg/cp_measure. All code to reproduce the analyses and figures, alongside links to the original data, is available on the Github repository https://github.com/afermg/2025_cpmeasure/. The datasets we produced for this work are available on Zenodo, and the latest version can be found on https://zenodo.org/records/15390631/latest.
 
 #+print_bibliography:
 
