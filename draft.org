@@ -63,13 +63,18 @@
 
 #+begin_export latex
 \begin{abstract}
-Quantifying the contents of objects in images is a common challenge in bioimage analysis. The most widely used software to process imaging data requires manual intervention. We introduce library cp\_measure, which provides programmatic access to the most used object measurements. We then demonstrate that the features are consistent to the standard ones and provide some examples for which our tool is more suitable than the alternatives. cp\_measure opens the gates for community-driven  development and expansion of bioimage analysis, increasing both the accessibility and reproducibility of the field.
+Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to process imaging data requires manual intervention. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics for bioimage analysis. We then demonstrate that the features are consistent to the standard ones and provide some examples for which our tool is more suitable than the alternatives. cp\_measure opens the gates for community-driven  development and expansion of bioimage analysis, increasing both the accessibility and reproducibility of the field.
 \end{abstract}
 #+end_export
 
 * Introduction
 # What is morphological profiling
-The field of morphological profiling uses data from cell microscopy images to obtain biological insights and, among other applications, accelerate drug discovery aided by machine and deep learning approaches in addition to traditional statistical methods.
+
+The field of biological imaging leverages data from cell microscopy images to obtain biological insights. Through microscopy techniques we can obtain information from a multitude of sources, such as illumination, fluorescent dyes or even proteins tagged with other proteins that fluoresce, acting as a beacon and providing information on quantity and/or localization.
+
+The main task at the core bioimage analysis is identifying features that convey information of the state of a cell or its contents. This entails combining identified objects with pixel data to quantify their morphology and other information sources, such as intensity distributions.
+
+Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods as well as machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently. It can also function as a complement to other high throughput techniques, such as genomics.
 
 ** The current state of bioimage analysis
 # What is CP
