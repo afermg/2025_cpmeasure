@@ -17,7 +17,7 @@ channel_rgb = {
     "Mito": "#FF0000",  # Red
     "RNA": "#FFFF00",  # Yellow
 }
-for colname, url in orig.sample(1).melt().rows():
+for colname, url in orig.sample(1).unpivot().rows():
     plt.close()
     plt.axis("off")
     channel = colname.split("_")[1].removeprefix("Orig")
