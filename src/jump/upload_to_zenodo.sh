@@ -1,7 +1,7 @@
 # Find the latest version of the dataset
 ZENODO_ENDPOINT="https://zenodo.org"
 DEPOSITION_PREFIX="${ZENODO_ENDPOINT}/api/deposit/depositions"
-ORIGINAL_ID="15359151"
+ORIGINAL_ID="15359196"
 DIR_TO_VERSION="$1"
 
 if [ -z "${ORIGINAL_ID}" ]; then # Only get latest id when provided an original one
@@ -58,7 +58,7 @@ echo -e '{"metadata": {
             "name": "Alán F. Muñoz"
         }
     ],
-"description":"<p>This dataset provides a subset of JUMP focusing on perturbations that showcase the most distinctiveness for every feature in JUMP. It contains the originals election manually curated from&nbsp;<a href="https://github.com/broadinstitute/monorepo/tree/main/libs/jump_rr#quick-data-access">JUMP_rr tables</a>, a parquet for convenience with the index, and a compressed tarball with all the tiff files.</p>",
+"description":"<p>This dataset provides a subset of JUMP focusing on perturbations that showcase the most distinctiveness for every feature in JUMP. It contains the originals election manually curated from the <a href=\\"https://github.com/broadinstitute/monorepo/tree/main/libs/jump_rr#quick-data-access\\">JUMP_rr tables</a>, a parquet for convenience with the index, and a compressed tarball with all the tiff files.</p>",
 "upload_type": "dataset",
 "access_right": "open"
 }}' >metadata.json

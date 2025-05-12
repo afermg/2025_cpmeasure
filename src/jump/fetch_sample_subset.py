@@ -16,7 +16,7 @@ from jump_portrait.s3 import get_image_from_s3uri
 from PIL import Image
 from tqdm import tqdm
 
-out_dir = Path("/datastore/alan/cp_measure/jump_subset")
+out_dir = Path("/datastore/alan/cp_measure/jump")
 
 source_table = (
     "https://zenodo.org/api/records/15359196/files/original_selection.csv/content"
@@ -68,7 +68,7 @@ def download_save(row: tuple[str, str, str, str]):
     img = get_image_from_s3uri(uri)
     pil_img = Image.fromarray(img)
 
-    pil_img.save(filename, compression="lzma")
+    pil_img.save(filename)  # , compression="lzma")
 
     return 1
 
@@ -77,4 +77,10 @@ out_dir.mkdir(parents=True, exist_ok=True)
 
 responses = list(
     Parallel(n_jobs=-1)(delayed(download_save)(item) for item in tqdm(images_df.rows()))
+)
+
+from skimage.io import imread
+
+imread(
+    "../../../../../../../../../datastore/alan/cp_measure/test/jump/AGMAT_ER_01__source_13__20221109_Run5__CP-CC9-R5-10__D20__2.tif"
 )
