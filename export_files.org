@@ -38,7 +38,7 @@
        :base-extension "org"
        :publishing-directory ,pub-directory
        :publishing-function org-latex-publish-to-pdf
-       :exclude ".*publish.*.org\\|readme.org\\|export_files.org"
+       :exclude ".*publish.*.org\\|readme.org\\|export_files.org\\|notes.org"
        ;; :section-numbers 2
        :with-toc        nil
        :latex-class "article-minimal"
