@@ -69,15 +69,13 @@ Quantifying the contents of objects in images is a common challenge in biologica
 
 * Introduction
 # What is morphological profiling
-
 The field of biological imaging leverages data from cell microscopy images to obtain biological insights. Through microscopy techniques we can obtain information from a multitude of sources, such as illumination, fluorescent dyes or even proteins tagged with other proteins that fluoresce, acting as a beacon and providing information on quantity and/or localization.
-
 The main task at the core bioimage analysis is identifying features that convey information of the state of a cell or its contents. This entails combining identified objects with pixel data to quantify their morphology and other information sources, such as intensity distributions.
 
-Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently [TODO add citation]. It can also function as a complement to other high throughput techniques, such as genomics.
+Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently [cite:@sealDecadeSystematicReview2024]. It can also function as a complement to other high throughput techniques, such as genomics.
 
 ** The current state of bioimage analysis
-# What is CP
+# what is CP
 The most widely-used software to process biological imaging data is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its target users are biologists with limited programmatic expertise. The accessibility that manually implemented workflows reduces its suitability for automated analyses and the composition of more complex pipelines.
 
 # Why is it not sufficient
@@ -86,7 +84,7 @@ The usage of CellProfiler entails a higher degree of friction for composite pipe
 # Current limitations of the field
 A small subset of the features in CellProfiler is provided by scikit-image, but this is greatly limited and cannot be reliably compared to the existing body of work that used CellProfiler to obtain the measurements. The other big problem of CellProfiler is its dependency on human interaction at many steps of the analysis, opening the door to human mistakes and hindering analyses reproducibility.
 
-# CP is limited as  pluggable tool
+# cp is limited as  pluggable tool
 A CellProfiler build pipeline requires cannot easily integrate with others. Its existing plug-in system is inaccessible for most users and has strong limitations. Building automated pipelines that contain CellProfiler and integrating tools within its components are time and effort-consuming challenges.
 
 # Why do we need something like cp measure
@@ -116,12 +114,13 @@ As a whole, there is still a role to be played for engineered features. The comm
 * Extraction of interpretable features using cp_measure
 # Measurement parity with CellProfiler extending from original implementation
 
-With cp_measure we recapitulated all features used in the vast majority of experiments: One object and one imaging channel (e.g., intensity), one object and multiple channels (e.g., Manders correlation) and multiple objects (e.g., number of neighbors).
-#+CAPTION: Our library extracts metrics from images within the region defined by objects masks. Its produces measurements for every object.
+With cp_measure we recapitulated all features used in the vast majority of experiments: One object and one imaging channel (e.g., intensity), one object and multiple channels (e.g., Manders correlation) and multiple objects (e.g., number of neighbors). 
+
+#+CAPTION: Extraction of measurements based on a collective of objects. cp_measure generates features from images by using the local information in a mask-defined region of interest. Its produces measurements for every object, and is usually used to acquire information on the pairwise combination of all the available channels.
 #+NAME: fig:overview
 [[./figs/cpmeasure_overview.svg]]
 
-# Extensibilty
+# Extensibility
 The cp_measure's code base was based on CellProfiler's, but we removed the sections of the code that are unnecessary for programmatic usage, thus separating the actual functional components from the orchestration logic. It improves reusability, testability and its makes it possible for more people to access and improve its internals in the future. It aims to be a stepping stone to increased extensibility and maintainability.
 
 # Scikit-image style API for ease of use
@@ -133,10 +132,10 @@ By isolating and cleaning the implemented mathematics of CellProfiler we aim to 
 When comparing the equivalent pipelines, cp_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
 
 # Overview of usage
-We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [TODO JUMP-CP citation]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability.
+We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability.
 
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
-** We recapitulate CellProfiler measurements
+** Our features match analogous CellProfiler measurements
 
 Our first aim was to validate the features from cp_measure compared to the CellProfiler standard ones. We used images from the JUMP dataset, containing more than 130,000 chemical and genetic perturbations. We first curated a set of genetic perturbations that, based on existing analyses, contained cells with distinctive morphologies to all others based on the CellProfiler features. Using this curated dataset, we segmented the cytosol and nuclei of the cells using a CellProfiler pipeline to obtain both segmentation masks and the original morphological features.
 
@@ -148,8 +147,9 @@ Next, we used the segmentation masks to calculate the cp_measure features. Then 
 
 ** Results and examples of usage
 *** Classification of astrocytes and their distinctive features
+
 # Extracting features from 3D data (Alex's data, Alan's short analysis)
-As a proof of concept, we showcased that cp_measure can be used in a workflow to train a classifier for cell populations. We used it to process 433 3D images of astrocytes containing 831 cells [TODO Cite Alex's astrocytes paper]. We then calculated the median value for every feature in a cell and the number of cells, following standard procedures [TODO Cite pycytominer]. Then we trained a Gradient Boosting classifier to identify which day. With this we identified which features distinguish cells on the later samples and distinguish subpopulations. It is worth noting that there will be some redundancy in the information contained in the cp_measure features, and thus during cases in which multiple features inform on the same groups of cells Shapley values is likely to only capture one of them.
+As a proof of concept, we showcased that cp_measure can be used in a workflow to train a classifier for cell populations. We used it to process 433 3D images of astrocytes containing 831 cells [cite:@kalinin3DCellNuclear2018]. We then calculated the median value for every feature in a cell and the number of cells, following standard procedures [cite:@caicedoDataanalysisStrategiesImagebased2017]. Then we trained a Gradient Boosting classifier to identify which day. With this we identified which features distinguish cells on the later samples and distinguish subpopulations. It is worth noting that there will be some redundancy in the information contained in the cp_measure features, and thus during cases in which multiple features inform on the same groups of cells Shapley values is likely to only capture one of them.
 
 #+CAPTION: Shapley values of most important features to classify the day in which an image was taken (a multi-class classification task). The test data accuracy is shown in bold. Our results showcased the axis length of the cell to be a major indicator of phenotypic effect, implying that cells became more elongated on their minor axis. 
 #+NAME: fig:astrocytes
@@ -172,17 +172,17 @@ The usage of manually-encoded workflows hinders reproducibility and may render d
 Reducing our reliance in graphical interfaces brings about better scaling capabilities for high-content microscopy data without the need of cloud-based infrastructure.
   
 # Interpretable features for morphological profiling
-The biologically interpretable features provided by cp_measure complement deep learning ones and offer a better mechanistic understanding of the underlying biology. When used in tandem with generalist tools it helps compose larger and faster pipelines.
+The biologically interpretable features provided by cp_measure complement deep learning ones and offer a better mechanistic understanding of the underlying biology. When used in tandem with generalist tools it enables more insightful pipelines that leverage machine and deep learning approaches.
   
 # Other adjacent fields
-These measurements have already been used in non-biological contexts [TODO cite https://www.sciencedirect.com/science/article/pii/S0013935125001859], thus cp_measure metrics also benefit other scientific fields beyond morphological profiling.
+These measurements have already been used in non-biological contexts, such as environmental monitoring [cite:@ideharaExploringNileRed2025], thus these engineered metrics also benefit other scientific fields beyond morphological profiling. 
 # cp_measure as an accessible way to obtain single-object measurements for microscopy measurements within Python
 # Engineered features complement deep learning and together provide a better mechanistic understanding of the underlying biology.
 
 * Future work
 There are multiple paths to improve and expand the functionality of cp_measure. The first and most obvious is to integrate its measurements back to CellProfiler library. This would ensure that the results from pipelines built with either tool will be comparable in the future, while also providing the opportunity of formalizing the programmatic interface --- inputs and outputs --- of measurements.
 
-Developing a comprehensive tests suite would guarantee mathematical correctness under the possible edge cases that may be encountered when dealing with new data. This test suite in turn would in turn open the door to further speed-ups in multiple ways: Firstly, optimizing the measurements that consume the most time, starting with object granularity (~80% of the time). Additionally, it is possible to implement measurements using numba for just-in-time compiling and/or adding GPU support [TODO cite numba].
+Developing a comprehensive tests suite would guarantee mathematical correctness under the possible edge cases that may be encountered when dealing with new data. This test suite in turn would in turn open the door to further speed-ups in multiple ways: Firstly, optimizing the measurements that consume the most time, starting with object granularity (~80% of the time). Additionally, it is possible to implement measurements using numba for just-in-time compiling and/or adding GPU support [cite:@lamNumbaLLVMbasedPython2015].
 
 We plan to add other quality-of-life features. First, add a wrapper to call measurements on the fly, analogous to scikit-image's regionprops function. Secondly, a list of essential measurements for use-cases where speed is more important than using all the features. By lowering the barrier of effort required to integrate cp_measure into existing pipelines these 
 
@@ -194,5 +194,10 @@ The code for cp_measure is available on https://github.com/afermg/cp_measure. Al
 
 #+print_bibliography:
 
-* Suplementary                                                     :noexport:
+* Appendix                                                         :noexport:
 Move here anything that should go in the supplementary material.
+** List of measurements and the features they generate
+
+| Measurement | Metric | Kind |
+|-------------+--------+------|
+|             |        |      |
