@@ -13,17 +13,21 @@
             pkgs = import nixpkgs {
               system = system;
               config.allowUnfree = true;
+              config.cudaSupport = true;
             };
 
             mpkgs = import inputs.nixpkgs_master {
               system = system;
               config.allowUnfree = true;
+              config.cudaSupport = true;
             };
 
             libList = [
               pkgs.stdenv.cc.cc
+              pkgs.libGL
+              pkgs.glib
               pkgs.libz
-              ];
+            ];
           in
           with pkgs;
         {
@@ -33,9 +37,10 @@
                 pwp = (python311.withPackages (p: with p; [
                      python-lsp-server
                      python-lsp-ruff
+                     # cython
                    ]));
             in mkShell {
-                NIX_LD_LIBRARY_PATH = lib.makeLibraryPath libList;
+              
                 packages = [
                   pwp
                   python311Packages.venvShellHook
@@ -51,7 +56,7 @@
                   '';
                 shellHook = ''
                     export UV_PYTHON=${pkgs.python311}
-                    export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:$LD_LIBRARY_PATH
+                    export LD_LIBRARY_PATH=$NIX_LD_LIBRARY_PATH:"/run/opengl-driver/lib":$LD_LIBRARY_PATH
                     export PYTHON_KEYRING_BACKEND=keyring.backends.fail.Keyring
 
                     runHook venvShellHook
@@ -64,3 +69,6 @@
         }
       );
 }
+              # NIX_LD = runCommand "ld.so" { } ''
+              #   ln -s "$(cat '${pkgs.stdenv.cc}/nix-support/dynamic-linker')" $out
+              # '';
