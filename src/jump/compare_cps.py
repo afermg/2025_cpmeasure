@@ -19,6 +19,7 @@ from tqdm import tqdm
 img_dir = Path("/datastore/alan/cp_measure/jump_subset/images")
 out_dir = Path("/datastore/alan/cp_measure/jump_masks")
 out_dir.mkdir(exist_ok=True, parents=True)
+img_dir.mkdir(exist_ok=True, parents=True)
 
 
 def segment_save(mask: np.ndarray, name: str) -> str:
@@ -50,10 +51,11 @@ n_errors = len([
     if isinstance(x, str)
 ])
 assert not n_errors
+img_paths = sorted(list(img_dir.glob("*.tif")))
 
 segmentable_files = [
     str(x)
-    for x in img_dir.glob("*.tif")
+    for x in img_paths
     if Path(x).name.split("_")[2] in segmentable_channels
     # and not (Path(x).name.startswith("AASDHPPT") and str(x)[45:47] == "01")
 ]
@@ -63,7 +65,7 @@ loaded_imgs = list(
 )
 
 masks_flows = model.eval(loaded_imgs)
-
+masks = masks_flows[0]
 mask_ids = list(
     Parallel(n_jobs=-1)(
         delayed(segment_save)(mask, Path(filepath).stem)
@@ -73,14 +75,14 @@ mask_ids = list(
 
 
 def apply_measurements(mask_path: str, img_path: str) -> pl.DataFrame:
-    meta = Path(img_path).parent.name.split("_")[:2]
-    meta = (*meta, Path(img_path).stem)
+    # meta = Path(img_path).parent.name.split("_")[:2]
+    # meta = (*meta, Path(img_path).stem)
 
     # labels = imread(mask_path)
     # labels_redz = labels.max(axis=0)
     # Cover case where the reduction on z removes an entire item
     # Unlike in other cases, here we assume that the input mask can have gaps
-    labels_redz = fix_non_continuous_labels(labels_redz)
+    # labels_redz = fix_non_continuous_labels(labels_redz)
 
     img = imread(img_path)
     flat_img = img.max(axis=0)
@@ -98,3 +100,25 @@ def apply_measurements(mask_path: str, img_path: str) -> pl.DataFrame:
     df = pl.from_dict(d)
 
     return df
+
+
+# %%
+d = {tuple(Path(v).stem.split("_")[:2]): [] for v in segmentable_files}
+for v in segmentable_files:
+    fpath = Path(v)
+    k = tuple(fpath.stem.split("_")[:2])
+    d[k].append(fpath.stem)
+# %%
+# Map two masks for every image
+# Do the combinatorials
+# Get features
+# Bring together
+# Get pairs of channels
+# Get multichannel features
+# Bring together
+# %%
+# import matplotlib.pyplot as plt
+
+# plt.imshow(masks[0], cmap="tab20")
+# plt.savefig("delme.png", dpi=300)
+# plt.close()
