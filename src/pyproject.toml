@@ -5,6 +5,7 @@ description = "Code to reproduce figures for submission."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "cellpose>=4.0.2",
     "cp-measure>=0.1.10",
     "joblib>=1.5.0",
     "jump-portrait>=0.0.27",
