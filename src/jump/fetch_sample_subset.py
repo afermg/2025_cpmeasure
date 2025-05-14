@@ -17,9 +17,7 @@ from PIL import Image
 from tqdm import tqdm
 
 out_dir = Path("/datastore/alan/cp_measure/jump_subset")
-images_dir = out_dir / "images"
 out_dir.mkdir(parents=True, exist_ok=True)
-images_dir.mkdir(parents=True, exist_ok=True)
 source_table = (
     "https://zenodo.org/api/records/15359196/files/original_selection.csv/content"
 )
@@ -65,21 +63,14 @@ images_df.write_parquet(out_dir / ".." / "to_upload" / "image_index.parquet")
 
 def download_save(row: tuple[str, str, str, str]):
     pert_name, *meta_vals = row[:n_meta_cols]
-    channel, uri, rep = row[n_meta_cols:]
-    # Format: "PERTNAME_REPLICATE_CHANNEL__SOURCE__PLATE__BATCH__WELL__SITE.tif"
-    # Note that the double underscore (__) splits the original ids AND the id set for this subset of the data.
-    filename = (
-        out_dir / "images" / f"{pert_name}_{rep}_{channel}__{'__'.join(meta_vals)}.tif"
-    )
-
-    img = get_image_from_s3uri(uri)
-    pil_img = Image.fromarray(img)
-
-    pil_img.save(filename)  # , compression="lzma")
-
-    return 1
 
 
-responses = list(
-    Parallel(n_jobs=-1)(delayed(download_save)(item) for item in tqdm(images_df.rows()))
-)
+# Validate
+
+from skimage.io import imread
+
+for shape in (1080, 1280):
+    fpath = Path(f"/datastore/alan/cp_measure/jump_subset/shape_{shape}/")
+    for file in fpath.glob("*.tif"):
+        tmp = imread(file).shape[1]
+        assert tmp == shape, "va"
