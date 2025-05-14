@@ -76,10 +76,10 @@ Morphological profiling a subfield of bioimaging that focuses on the cells and t
 
 ** The current state of bioimage analysis
 # what is CP
-The most widely-used software to process biological imaging data is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its target users are biologists with limited programmatic expertise. The accessibility that manually implemented workflows reduces its suitability for automated analyses and the composition of more complex pipelines.
+The most widely-used software to process biological imaging data is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its target users are biologists with limited programmatic expertise. The accessibility that manually implemented workflows reduces its suitability for automated analyses and the composition of more complex pipelines. In this context we define accessibility as the lack of friction to use the software in computational pipelines.
 
 # Why is it not sufficient
-The usage of CellProfiler entails a higher degree of friction for composite pipelines that orchestrate multiple tools. Its focus on manually-defined workflows adjusted for specific use-cases makes it less suitable for many high throughput analyses. Additionally, CellProfiler has a significant number of dependencies. It depends on libraries from both Python and Java languages, thus increasing the complexity of setting it up in an environment where others may abound. Tough containers partially alleviate this problem, they carry additional complexity and caveats.
+The usage of CellProfiler entails a higher degree of friction for composite pipelines that orchestrate multiple tools. Its focus on manually-defined workflows adjusted for specific use-cases makes it less suitable for many high throughput analyses. Additionally, CellProfiler has a significant number of dependencies. It depends on libraries from both the Python and Java languages, thus increasing the number of things that may go wrong when setting up or integrating with other tools. Tough containers partially alleviate this problem, they carry additional complexity and caveats.
 
 # Current limitations of the field
 A small subset of the features in CellProfiler is provided by scikit-image, but this is greatly limited and cannot be reliably compared to the existing body of work that used CellProfiler to obtain the measurements. The other big problem of CellProfiler is its dependency on human interaction at many steps of the analysis, opening the door to human mistakes and hindering analyses reproducibility.
@@ -132,7 +132,7 @@ By isolating and cleaning the implemented mathematics of CellProfiler we aim to 
 When comparing the equivalent pipelines, cp_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
 
 # Overview of usage
-We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability.
+We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability. 
 
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
 ** Our features match analogous CellProfiler measurements
@@ -141,7 +141,7 @@ Our first aim was to validate the features from cp_measure compared to the CellP
 
 Next, we used the segmentation masks to calculate the cp_measure features. Then we mapped the features from CellProfiler to cp_measure and compared the values in both. Figure [[fig:cp_vs_cpmeasure]] shows this comparison. Then we demonstrate that we recapitulate the CellProfiler features.
 
-#+CAPTION: [Placeholder] Comparison of CellProfiler and cp_measure.
+#+CAPTION: [Placeholder] Comparison of CellProfiler and cp_measure. 
 #+NAME: fig:cp_vs_cpmeasure
 [[./figs/astro3d.svg]]
 
@@ -157,25 +157,23 @@ As a proof of concept, we showcased that cp_measure can be used in a workflow to
 
 *** Applicability on spatial transcriptomics
 # Beyond morphology screening: Spatial transcriptomics data (Tim's data and analysis)
-#+CAPTION: [PLACEHOLDER] Spatial omics analysis
+#+CAPTION: [PLACEHOLDER] Spatial omics analysis.
 #+NAME: fig:spatial_omics
-[[./figs/axon3d.svg]]
+[[./figs/spatial.png]]
 
 * Discussion
 #  The goal is to import it back into CP eventually anyway, so this feels very clean
 # "Proposals for better workflows or incentives for open-source development and maintenance in ML"
 
 # Reproducibility through code-based workflows
-The usage of manually-encoded workflows hinders reproducibility and may render different datasets incomparable. Our library cp_measure provides an easier way to automate the processing of microscopy data both in short scripts and complex pipelines.
-  
 # Reduced reliance on GUI interfaces
-Reducing our reliance in graphical interfaces brings about better scaling capabilities for high-content microscopy data without the need of cloud-based infrastructure.
+The usage of image analysis pipelines that require manual setups hinders reproducibility and hinders our ability to compare different datasets. In this work we introduced our new library cp_measure, which provides widely used engineered features and enables simpler automated analyses of microscopy data in either short scripts and complex pipelines. This also removes the requirement of using graphical interfaces to process microscopy data, resulting in better scaling capabilities for high-content microscopy data without the need of cloud-based infrastructure.
   
 # Interpretable features for morphological profiling
-The biologically interpretable features provided by cp_measure complement deep learning ones and offer a better mechanistic understanding of the underlying biology. When used in tandem with generalist tools it enables more insightful pipelines that leverage machine and deep learning approaches.
+The biologically interpretable features provided by cp_measure complement deep learning ones and offer a better mechanistic understanding of the underlying biology. When used in tandem with generalist tools it enables more insightful pipelines that leverage machine and deep learning approaches. 
   
 # Other adjacent fields
-These measurements have already been used in non-biological contexts, such as environmental monitoring [cite:@ideharaExploringNileRed2025], thus these engineered metrics also benefit other scientific fields beyond morphological profiling. 
+These measurements have already been used in non-biological contexts, such as environmental monitoring [cite:@ideharaExploringNileRed2025], thus these engineered metrics also benefit other scientific fields beyond morphological profiling. In general, we see the decomposition of CellProfiler into modular components as a way to facili
 # cp_measure as an accessible way to obtain single-object measurements for microscopy measurements within Python
 # Engineered features complement deep learning and together provide a better mechanistic understanding of the underlying biology.
 
@@ -184,13 +182,13 @@ There are multiple paths to improve and expand the functionality of cp_measure. 
 
 Developing a comprehensive tests suite would guarantee mathematical correctness under the possible edge cases that may be encountered when dealing with new data. This test suite in turn would in turn open the door to further speed-ups in multiple ways: Firstly, optimizing the measurements that consume the most time, starting with object granularity (~80% of the time). Additionally, it is possible to implement measurements using numba for just-in-time compiling and/or adding GPU support [cite:@lamNumbaLLVMbasedPython2015].
 
-We plan to add other quality-of-life features. First, add a wrapper to call measurements on the fly, analogous to scikit-image's regionprops function. Secondly, a list of essential measurements for use-cases where speed is more important than using all the features. By lowering the barrier of effort required to integrate cp_measure into existing pipelines these 
+There is further space for improvement. First, provide a wrapper for all features that masp to scikit-image's regionprops as close as possible. Secondly, a list of essential measurements for use-cases where speed is more important than using all the features. By lowering the barrier of effort required to integrate cp_measure into existing pipelines these 
 
 Long-term, we envision cp_measure can be the place to develop and distribute new measurements. While CellProfiler's measurements are widely used in bioimaging studies, the existing palette of measurements could be further extended to cover novel use-cases brought upon by novel developments in imaging acquisition devices and methods. Working with the community to further the number of measurements to better match the current questions scientists pose to imaging data.
 
 * Methods
 ** Data and software
-The code for cp_measure is available on https://github.com/afermg/cp_measure. All code to reproduce the analyses and figures, alongside links to the original data, is available on the Github repository https://github.com/afermg/2025_cpmeasure/. The datasets we produced for this work are available on Zenodo, and the latest version can be found on https://zenodo.org/records/15390631/latest.
+The code for cp_measure is available on https://anonymous.4open.science/r/cp_measure-B0DA. All code to reproduce the analyses and figures, alongside links to the original data, is available on the Github repository https://github.com/afermg/2025_cpmeasure/. The datasets we produced for this work are available on Zenodo, and the latest version can be found on https://zenodo.org/records/15390631/latest.
 
 #+print_bibliography:
 
@@ -200,4 +198,25 @@ Move here anything that should go in the supplementary material.
 
 | Measurement | Metric | Kind |
 |-------------+--------+------|
-|             |        |      |
+|measureobjectsizeshape|get_sizeshape
+|measureobjectintensity|get_intensity
+|measureobjectsizeshape|get_zernike
+|measureobjectsizeshape|get_ferret
+|measuregranularity|get_granularity
+|measuretexture|get_texture
+|measureobjectintensitydistribution|get_radial_zernikes
+The other available functions are as follows:
+
+
+And for Type 2 functions:
+
+    measurecolocalization.get_correlation_pearson
+    measurecolocalization.get_correlation_manders_fold
+    measurecolocalization.get_correlation_rwc
+    measurecolocalization.get_correlation_costes
+    measurecolocalization.get_correlation_overlap
+
+For Type 3 functions:
+
+    measureobjectoverlap.measureobjectoverlap
+    measureobjectneghbors.measureobjectneighboors
