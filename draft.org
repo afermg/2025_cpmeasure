@@ -136,7 +136,7 @@ When comparing the equivalent pipelines, cp_measure's minimal overhead results i
 We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability. 
 
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
-** Our features match analogous CellProfiler measurements
+** Our features match CellProfiler standard measurements
 
 Our first aim was to validate the features from cp_measure compared to the CellProfiler standard ones. We used images from the JUMP dataset, containing more than 130,000 chemical and genetic perturbations. We first curated a set of genetic perturbations that, based on existing analyses, contained cells with distinctive morphologies to all others based on the CellProfiler features. Using this curated dataset, we segmented the cytosol and nuclei of the cells using a CellProfiler pipeline to obtain both segmentation masks and the original morphological features.
 
@@ -197,25 +197,23 @@ The code for cp_measure is available on https://anonymous.4open.science/r/cp_mea
 Move here anything that should go in the supplementary material.
 ** List of measurements and the features they generate
 
-| Measurement | Metric | Kind |
-|-------------+--------+------|
-|measureobjectsizeshape|get_sizeshape
-|measureobjectintensity|get_intensity
-|measureobjectsizeshape|get_zernike
-|measureobjectsizeshape|get_ferret
-|measuregranularity|get_granularity
-|measuretexture|get_texture
-|measureobjectintensitydistribution|get_radial_zernikes
+| Measurement                        | Metric                       | Type |
+|------------------------------------+------------------------------+------|
+| measureobjectsizeshape             | get_sizeshape                |    1 |
+| measureobjectintensity             | get_intensity                |    1 |
+| measureobjectsizeshape             | get_zernike                  |    1 |
+| measureobjectsizeshape             | get_ferret                   |    1 |
+| measuregranularity                 | get_granularity              |    1 |
+| measuretexture                     | get_texture                  |    1 |
+| measureobjectintensitydistribution | get_radial_zernikes          |    1 |
+| measurecolocalization              | get_correlation_pearson      |    2 |
+| measurecolocalization              | get_correlation_manders_fold |    2 |
+| measurecolocalization              | get_correlation_rwc          |    2 |
+| measurecolocalization              | get_correlation_costes       |    2 |
+| measurecolocalization              | get_correlation_overlap      |    2 |
+
 The other available functions are as follows:
 
-
-And for Type 2 functions:
-
-    measurecolocalization.get_correlation_pearson
-    measurecolocalization.get_correlation_manders_fold
-    measurecolocalization.get_correlation_rwc
-    measurecolocalization.get_correlation_costes
-    measurecolocalization.get_correlation_overlap
 
 For Type 3 functions:
 

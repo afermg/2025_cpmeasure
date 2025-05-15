@@ -1,4 +1,4 @@
-% Created 2025-05-15 Thu 13:57
+% Created 2025-05-15 Thu 14:07
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -124,8 +124,8 @@ By isolating and cleaning the implemented mathematics of CellProfiler we aim to 
 When comparing the equivalent pipelines, cp\_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
 
 We demonstrate the correlation of cp\_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset \citep{chandrasekaranJUMPCellPainting2023}. Then we demonstrate cases in which cp\_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability. 
-\subsection{Our features match analogous CellProfiler measurements}
-\label{sec:org37e389d}
+\subsection{Our features match CellProfiler standard measurements}
+\label{sec:org04a138e}
 
 Our first aim was to validate the features from cp\_measure compared to the CellProfiler standard ones. We used images from the JUMP dataset, containing more than 130,000 chemical and genetic perturbations. We first curated a set of genetic perturbations that, based on existing analyses, contained cells with distinctive morphologies to all others based on the CellProfiler features. Using this curated dataset, we segmented the cytosol and nuclei of the cells using a CellProfiler pipeline to obtain both segmentation masks and the original morphological features.
 
