@@ -63,13 +63,14 @@
 
 #+begin_export latex
 \begin{abstract}
-Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to acomplish require manual adjustments. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics to convert images and objects into features. We then demonstrate that the features are consistent to the standard ones and showcase tasks for which our tool is more suitable than the alternatives. Our tool opens the door to community-driven  development and expansion of bioimage analysis metrics and pipelines, increasing both the accessibility and reproducibility of the field.
+Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to do so require significant manual intervention. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics to convert images and objects into features. We then demonstrate that the features are consistent to the standard ones and showcase tasks for which our tool is more suitable than the alternatives. Our tool opens the door to community-driven  development and expansion of bioimage analysis metrics and pipelines, increasing both the accessibility and reproducibility of the field.
 \end{abstract}
 #+end_export
 
 * Introduction
 # What is morphological profiling
-The field of biological imaging leverages data from cell microscopy images to obtain biological insights. Through microscopy techniques we can obtain information from a multitude of sources, such as illumination, fluorescent dyes or even proteins tagged with other proteins that fluoresce, acting as a beacon and providing information on quantity and/or localization.
+The field of biological imaging leverages data from cell microscopy images to obtain biological insights. Microscopy techniques allows us to acquire information from a multitude of sources, such as illumination, fluorescent dyes or even proteins tagged with other proteins that fluoresce, acting as a beacon and providing information on quantity and/or localization.
+
 The main task at the core bioimage analysis is identifying features that convey information of the state of a cell or its contents. This entails combining identified objects with pixel data to quantify their morphology and other information sources, such as intensity distributions.
 
 Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently [cite:@sealDecadeSystematicReview2024]. It can also function as a complement to other high throughput techniques, such as genomics.
@@ -85,7 +86,7 @@ The usage of CellProfiler entails a higher degree of friction for composite pipe
 A small subset of the features in CellProfiler is provided by scikit-image, but this is greatly limited and cannot be reliably compared to the existing body of work that used CellProfiler to obtain the measurements. The other big problem of CellProfiler is its dependency on human interaction at many steps of the analysis, opening the door to human mistakes and hindering analyses reproducibility.
 
 # cp is limited as  pluggable tool
-A CellProfiler build pipeline requires cannot easily integrate with others. Its existing plug-in system is inaccessible for most users and has strong limitations. Building automated pipelines that contain CellProfiler and integrating tools within its components are time and effort-consuming challenges.
+A CellProfiler pipeline is does not integrate well with other tools. Its existing plug-in system is inaccessible for most users and has strong limitations. Building automated pipelines that contain CellProfiler and integrating tools within its components are time and effort-consuming challenges.
 
 # Why do we need something like cp measure
 In this space there is a vacuum for a software library that covers the generalist and high throughput use-cases for which CellProfiler is inadequate. Distributed CellProfiler would cover this case if not for its cloud-only approach and dependency on preconfigured pipelines, as well as its limited debugging capabilities [cite:@mcquinCellProfiler30Nextgeneration2018].
@@ -149,7 +150,7 @@ Next, we used the segmentation masks to calculate the cp_measure features. Then 
 *** Classification of astrocytes and their distinctive features
 
 # Extracting features from 3D data (Alex's data, Alan's short analysis)
-As a proof of concept, we showcased that cp_measure can be used in a workflow to train a classifier for cell populations. We used it to process 433 3D images of astrocytes containing 831 cells [cite:@kalinin3DCellNuclear2018]. We then calculated the median value for every feature in a cell and the number of cells, following standard procedures [cite:@caicedoDataanalysisStrategiesImagebased2017]. Then we trained a Gradient Boosting classifier to identify which day. With this we identified which features distinguish cells on the later samples and distinguish subpopulations. It is worth noting that there will be some redundancy in the information contained in the cp_measure features, and thus during cases in which multiple features inform on the same groups of cells Shapley values is likely to only capture one of them.
+As a demonstration of its ease of use, we used cp_measure for featurization in a cell classification workflow. We used it to process 433 3D images of astrocytes containing 831 cells [cite:@kalinin3DCellNuclear2018]. We then calculated the median value for every feature in a cell and the number of cells, following standard procedures [cite:@caicedoDataanalysisStrategiesImagebased2017]. Then we trained a Gradient Boosting classifier to identify which day. With this we identified which features distinguish cells on the later samples and distinguish subpopulations. It is worth noting that there will be some redundancy in the information contained in the cp_measure features, and thus during cases in which multiple features inform on similar data subsets.
 
 #+CAPTION: Shapley values of most important features to classify the day in which an image was taken (a multi-class classification task). The test data accuracy is shown in bold. Our results showcased the axis length of the cell to be a major indicator of phenotypic effect, implying that cells became more elongated on their minor axis. 
 #+NAME: fig:astrocytes
