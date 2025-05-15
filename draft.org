@@ -31,8 +31,8 @@
 \icmlauthor{Alexandr A. Kalinin}{broad}
 \icmlauthor{Shatavisha Dasgupta}{broad}
 \icmlauthor{Fabian Theis}{hh}
-\icmlauthor{Shantanu Singh}{broad}
 \icmlauthor{Anne E. Carpenter}{broad}
+\icmlauthor{Shantanu Singh}{broad}
 \end{icmlauthorlist}
 
 \icmlaffiliation{broad}{Broad Institute of MIT and Harvard, United States}
