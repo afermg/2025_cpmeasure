@@ -63,7 +63,7 @@
 
 #+begin_export latex
 \begin{abstract}
-Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to do so require significant manual intervention. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics to convert images and objects into features. We then demonstrate that the features are consistent to the standard ones and showcase tasks for which our tool is more suitable than the alternatives. Our tool opens the door to community-driven  development and expansion of bioimage analysis metrics and pipelines, increasing both the accessibility and reproducibility of the field.
+Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to do so require significant manual intervention. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics to convert images and objects into features. We then demonstrate that the features are consistent to the standard ones and showcase tasks for which our tool is more suitable than the alternatives. Our tool opens the door to community-driven  development and expansion of bioimage analysis metrics and pipelines, increasing developer accessibility and reproducibility of the pipelines.
 \end{abstract}
 #+end_export
 
@@ -73,7 +73,7 @@ The field of biological imaging leverages data from cell microscopy images to ob
 
 The main task at the core bioimage analysis is identifying features that convey information of the state of a cell or its contents. This entails combining identified objects with pixel data to quantify their morphology and other information sources, such as intensity distributions.
 
-Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently [cite:@sealDecadeSystematicReview2024]. It can also function as a complement to other high throughput techniques, such as genomics.
+Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently [cite:@sealDecadeSystematicReview2024]. It can also complement to other high throughput methods, such as genomic sequencing.
 
 ** The current state of bioimage analysis
 # what is CP
@@ -101,7 +101,7 @@ The unprecedented evolution of deep learning methods in recent years has made av
 Unlike with deep learning-based features, whose interpretation requires complex methods such as counterfactuals or attention maps, most of the engineered features have a mathematical definition that is vastly simpler to translate into biological insights.
 
 # DL is not always better-performing
-Engineered features can also outperform deep learning ones under some conditions [cite:@tangMorphologicalProfilingDrug2024]. Though deep learning features are more likely to improve in the coming years
+Engineered features can also outperform deep learning ones under some conditions [cite:@tangMorphologicalProfilingDrug2024]. Even if deep learning features improve over the coming years, they will most likely require more complex interpretability methods, if they are interpretable at all.
 
 # DL requires training on a given dataset and appropriate samples may not be available for training and it’s a pain
 It also has a higher barrier of entry, since most models require annotating data for training and testing. Even new foundational models do not generalize well for out-of-distribution data.
