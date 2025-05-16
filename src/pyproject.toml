@@ -7,6 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "cellpose>=4.0.2",
     "cp-measure>=0.1.10",
+    "duckdb>=1.2.2",
     "joblib>=1.5.0",
     "jump-portrait>=0.0.27",
     "pillow>=11.2.1",
