@@ -19,21 +19,24 @@ from joblib import Parallel, delayed
 from skimage.io import imread
 from tqdm import tqdm
 
-img_dir = Path("/datastore/alan/cp_measure/jump_subset")
-out_dir = Path("/datastore/alan/cp_measure/jump_masks")
-out_dir.mkdir(exist_ok=True, parents=True)
-img_dir.mkdir(exist_ok=True, parents=True)
+output_dir = Path("/datastore/alan/cp_measure/")
+img_dir = output_dir / "jump_subset"
+mask_dir = output_dir / "jump_masks"
+profiles_dir = output_dir / "profiles"
+for folder in (img_dir, mask_dir, results_dir):
+    folder.mkdir(exist_ok=True, parents=True)
 
 
 MEASUREMENTS = get_core_measurements()
 
 
-def get_keys(fpath: Path, n: int = 2) -> tuple[str, str]:
+def get_keys(fpath: Path, n: int = 2) -> tuple[str]:
     return tuple(fpath.stem.split("_")[:n])
 
 
 def segment_save(mask: np.ndarray, name: str) -> str:
-    fpath = out_dir / f"{name}.npz"
+    fpath = out_dir / f"shape_{mask.shape[1]}" / f"{name}.npz"
+    fpath.parent.mkdir(parents=True, exist_ok=True)
     np.savez(fpath, mask)
     return fpath
 
@@ -71,35 +74,29 @@ segmentable_files = [
 ]
 
 
-def apply_measurements(mask_path: Path, img_path: Path) -> pl.DataFrame:
-    # meta = Path(img_path).parent.name.split("_")[:2]
-    # meta = (*meta, Path(img_path).stem)
-
-    if mask_path.endswith("npz"):
+def read_labels(mask_path: Path):
+    if str(mask_path).endswith("npz"):
         labels = np.load(mask_path)["arr_0"]
     else:
         labels = imread(mask_path)
-    # if gaps:
-    #     labels = labels.max(axis=0)
-    # Cover case where the reduction on z removes an entire item
-    # Unlike in other cases, here we assume that the input mask can have gaps
-    # labels = fix_non_continuous_labels(labels_redz)
+    return labels
+
+
+def apply_measurements(mask_path: Path, img_path: Path) -> pl.DataFrame:
+    gene, site, channel = img_path.stem.split("_")[:3]
+    labels = read_labels(mask_path)
 
     img = imread(img_path)
     if img.ndim == 3:
         flat_img = img.max(axis=0)
         flat_img = flat_img / flat_img.max()
     d = {}
-    # mask = imread(mask_path)
     for meas_name, meas_f in MEASUREMENTS.items():
         measurements = meas_f(labels, img)
         # Unpack output dictionaries
         for k, v in measurements.items():
             d[k] = v
-            # for k, v in zip(("pert", "day", "stem"), meta):
-            #     d[k] = v
             d["object"] = mask_path.stem.split("_")[2]
-            gene, site, channel = img_path.stem.split("_")[:3]
             d["gene"] = gene
             d["site"] = site
             d["channel"] = channel
@@ -107,6 +104,28 @@ def apply_measurements(mask_path: Path, img_path: Path) -> pl.DataFrame:
     df = pl.from_dict(d)
 
     return df
+
+
+def apply_measurements_type2(
+    mask_path: Path, pixels1_path: Path, pixels2_path: Path
+) -> pl.DataFrame:
+    labels = read_labels(mask_path)
+    pixels1 = imread(pixels1_path)
+    pixels2 = imread(pixels2_path)
+
+    for meas_name, meas_f in MEASUREMENTS_TYPE2.items():
+        measurements = meas_f(labels, pixels1, pixels1)
+        # Unpack output dictionaries
+        for k, v in measurements.items():
+            d[k] = v
+            # for k, v in zip(("pert", "day", "stem"), meta):
+            #     d[k] = v
+            d["object"] = mask_path.stem.split("_")[2]
+            gene, site, channel1 = pixels1_path.stem.split("_")[:3]
+            d["gene"] = gene
+            d["site"] = site
+            channel2 = pixels2_path.stem.split("_")[2]
+            d["channel"] = (channel1, channel2)
 
 
 # %%
@@ -126,15 +145,19 @@ loaded_imgs = list(
 ngpus = torch.cuda.device_count()
 model = [models.CellposeModel(device=torch.device(i)) for i in range(ngpus)]
 
+batch_size = len(loaded_imgs) // ngpus
 with ThreadPoolExecutor(ngpus) as ex:
     masks = list(
-        ex.map(
-            lambda x: model[x].eval(
-                loaded_imgs[x : (x + 1) * (len(loaded_imgs) // ngpus)]
-            )[0],
-            range(ngpus),
+        chain(
+            *ex.map(
+                lambda x: model[x].eval(
+                    loaded_imgs[x * batch_size : (x + 1) * batch_size]
+                )[0],
+                range(ngpus),
+            )
         )
     )
+# masks = list(chain(*masks))
 # Organize masks
 mask_ids = list(
     Parallel(n_jobs=-1)(
@@ -143,32 +166,44 @@ mask_ids = list(
     )
 )
 
-for mask, fpath in zip(masks, flat_segmentable_files):
-    segment_save(mask, "_".join(get_keys(fpath, 3)))
 
+# We pair the mask names with their associated images
 pairs = [
     (
-        [
-            Path(out_dir) / ("_".join(k) + f"_{suffix}.npz")
-            for suffix in segmentable_channels
-        ],
+        [("_".join(k) + f"_{suffix}.npz") for suffix in segmentable_channels],
         sorted(v),
     )
     for k, v in groupby(img_paths, get_keys)
 ]
+
+# Check that all image sets are the same size
+assert len(set([len(x[1]) for x in pairs])) == 1, "Heterogeneous number of channels"
+
+# Get the product of all the mask-image combinations
 combs = list(chain(*[list(product(*xy)) for xy in pairs]))
 
+# Check that shapes match
 for mask, img in combs:
-    assert np.load(mask)["arr_0"].shape == imread(img).shape, "error"
-
+    assert (
+        np.load(out_dir / img.parent.name / mask)["arr_0"].shape == imread(img).shape
+    ), "error"
+# table = table.append_column(
+#     "object",
+#     pa.array([step_name.split("_")[-1]] * len(table), pa.string()),
+# )
+# table = table.append_column(
+#     "object",
+type2_pairs = [list(product((k, combinations(v, 2)))) for k, v in pairs]
+type2_pairs = [list(product((k, combinations(v, 2)))) for k, v in pairs]
+type2_pairs = [list(product((k, combinations(v, 2)))) for k, v in pairs]
 measure_results = Parallel(n_jobs=-1)(
-    delayed(apply_measurements)(m, img) for m, img in tqdm(combs)
+    delayed(apply_measurements)(out_dir / img.parent.name / m, img)
+    for m, img in tqdm(combs)
 )
+first_set = pl.concat(measure_results)
+first_set.write_parquet(profiles_dir / "first_set.parquet")
+# multichannel
 
+MEASUREMENTS_TYPE2 = get_correlation_measurements()
 
-# Do the combinatorials
-# Get features
-# Bring together
-# Get pairs of channels
-# Get multichannel features
-# Bring together
+# multimask
