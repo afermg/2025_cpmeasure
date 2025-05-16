@@ -1,4 +1,4 @@
-% Created 2025-05-15 Thu 14:07
+% Created 2025-05-16 Fri 08:47
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -70,7 +70,7 @@
 % \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 \begin{abstract}
-Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to do so require significant manual intervention. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics to convert images and objects into features. We then demonstrate that the features are consistent to the standard ones and showcase tasks for which our tool is more suitable than the alternatives. Our tool opens the door to community-driven  development and expansion of bioimage analysis metrics and pipelines, increasing both the accessibility and reproducibility of the field.
+Quantifying the contents of objects in images is a common challenge in biological imaging. The most widely used software to do so require significant manual intervention. Here we introduce our library cp\_measure, which provides programmatic access to the most widespread metrics to convert images and objects into features. We then demonstrate that the features are consistent to the standard ones and showcase tasks for which our tool is more suitable than the alternatives. Our tool opens the door to community-driven  development and expansion of bioimage analysis metrics and pipelines, increasing developer accessibility and reproducibility of the pipelines.
 \end{abstract}
 \section{Introduction}
 \label{sec:org6430daa}
@@ -78,7 +78,7 @@ The field of biological imaging leverages data from cell microscopy images to ob
 
 The main task at the core bioimage analysis is identifying features that convey information of the state of a cell or its contents. This entails combining identified objects with pixel data to quantify their morphology and other information sources, such as intensity distributions.
 
-Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently \citep{sealDecadeSystematicReview2024}. It can also function as a complement to other high throughput techniques, such as genomics.
+Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently \citep{sealDecadeSystematicReview2024}. It can also complement to other high throughput methods, such as genomic sequencing.
 \subsection{The current state of bioimage analysis}
 \label{sec:org8f5b33d}
 The most widely-used software to process biological imaging data is CellProfiler \citep{stirlingCellProfiler4Improvements2021}. Its target users are biologists with limited programmatic expertise. The accessibility that manually implemented workflows reduces its suitability for automated analyses and the composition of more complex pipelines. In this context we define accessibility as the lack of friction to use the software in computational pipelines.
@@ -98,7 +98,7 @@ The unprecedented evolution of deep learning methods in recent years has made av
 
 Unlike with deep learning-based features, whose interpretation requires complex methods such as counterfactuals or attention maps, most of the engineered features have a mathematical definition that is vastly simpler to translate into biological insights.
 
-Engineered features can also outperform deep learning ones under some conditions \citep{tangMorphologicalProfilingDrug2024}. Though deep learning features are more likely to improve in the coming years
+Engineered features can also outperform deep learning ones under some conditions \citep{tangMorphologicalProfilingDrug2024}. Even if deep learning features improve over the coming years, they will most likely require more complex interpretability methods, if they are interpretable at all.
 
 It also has a higher barrier of entry, since most models require annotating data for training and testing. Even new foundational models do not generalize well for out-of-distribution data.
 
@@ -150,6 +150,12 @@ As a demonstration of its ease of use, we used cp\_measure for featurization in 
 \end{figure}
 \subsubsection{Applicability on spatial transcriptomics}
 \label{sec:org1d0d8b8}
+A key advantage of providing these CellProfiler-like measurements as a standalone Python package is their ease of integration into diverse analytical workflows, which otherwise would require substantial adaptation to the standard CellProfiler environment. The recent proliferation of black-box foundation models trained solely on morphological data highlights morphology as a highly informative and predictive modality. However, the feature vectors produced by these models are typically not interpretable, preventing direct biological assessment. In contrast, classical morphological measurements yield explicit, interpretable readouts—for instance, the co-localization of fluorescent markers—facilitating clear biological interpretations.
+
+To demonstrate this utility, we integrated our cp$\backslash$\_measure-based feature extraction into the widely used spatial analysis library Squidpy [CITE]. Being standalone allowed seamless incorporation into workflows powered by the robust SpatialData [CITE] framework underlying Squidpy. Because spatial datasets often comprise significantly more cells per field-of-view (FOV) than conventional microscopy screenings—up to approximately 100,000 cells-traditional software typically cannot process these large images without cropping, which introduces boundary artifacts. Leveraging the modular design of cp$\backslash$\_measure, we parallelized feature extraction at the single-cell level, streaming batches of cells across computational cores. This approach enables efficient computation even on large-scale datasets, a feat not achievable with standard CellProfiler software.
+
+To further illustrate the value of morphological features, we evaluated their impact on cell-type prediction tasks using spatial transcriptomics data. This application is particularly compelling, as current spatial transcriptomics technologies typically produce matched histological images that remain largely underutilized beyond visualization. We analyzed two mouse brain datasets generated by Bruker Spatial's CosMx platform [CITE, \url{https://nanostring.com/products/cosmx-spatial-molecular-imager/ffpe-dataset/cosmx-smi-mouse-brain-ffpe-dataset/}]. Each dataset comprises expression profiles for 960 genes and immunofluorescence images captured via five distinct fluorescent probes ('Histone', 'DNA', 'GFAP', 'G', 'rRNA'). Morphological features were extracted from these 5-channel images for both datasets. Subsequently, both gene expression and morphological data were preprocessed according to best practices established by Scanpy [CITE] and PyCytoMiner [CITE], respectively. We trained an XGBoost model to predict cell types on the larger dataset (48,556 cells; see Fig. XXX, panel XXX), comparing models using either gene expression alone or combined gene expression and morphological data. Model performance was assessed by predicting cell types in a smaller independent dataset (38,996 cells), using the F1-score metric stratified by cell type. Figure XXX (panel XXX) highlights the improved predictive accuracy obtained when morphological features are included. Importantly, this performance enhancement required no additional experimental effort, underscoring the benefit of employing cp$\backslash$\_measure beyond its traditional scope.
+
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{./figs/spatial.png}
