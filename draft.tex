@@ -121,7 +121,7 @@ First, we validate cp\_measure features versus CellProfiler results with a subse
 \begin{figure}[htbp]
 \centering
 \includesvg[width=.9\linewidth]{./figs/jump_r2_examples}
-\caption{\label{fig:cp_vs_cpmeasure}We recapitulate the CellProfiler features. \textbf{Left panel.} Representative examples comparing Cellprofiler feature values to $$cp_measure$$, obtained from the same sets of masks and images. \textbf{Right panel.} $$R^2$$ value of a linear fit for each individual feature, comparing $$cp_measure$$ to CellProfiler.}
+\caption{\label{fig:cp_vs_cpmeasure}We recapitulate the CellProfiler features. \textbf{Left panel.} Representative examples comparing Cellprofiler feature values to cp_measure, obtained from the same sets of masks and images. \textbf{Right panel.} $R^2$ value of a linear fit for each individual feature, comparing cp_measure to CellProfiler.}
 \end{figure}
 
 We first performed a numerical validation of cp\_measure, relative to the original CellProfiler features. To do so, used curated a subset of 150 perturbations from the JUMP dataset, selecting the genetic perturbations with the most distinctive features. To ensure that we are using the exact same object masks, we segmented these images to obtain the cells and nuclei using CellProfiler, which yielded both morphological profiles and object masks. Next, we applied our measurements these masks with the original images and mapped the features from cp\_measure to CelProfiler. Figure \ref{fig:cp_vs_cpmeasure} shows some examples of the feature comparison alongside the $$R^2$$ value of a linear fit for all the mapped features.
