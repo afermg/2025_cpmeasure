@@ -56,11 +56,14 @@
   ;;  (message "Load path is %s" load-path)
   ;;  (require 'citeproc)
   ;; (message "Load path now is %s" load-path)
-
-
 #+END_SRC
 
-
+**** Random generator
+This ensures that section labels are determinisitic.
+#+begin_src emacs-lisp
+  (defun seed-random-generator (_) (random "a fixed and unchanging string"))
+  (add-hook 'org-export-before-processing-hook #'seed-random-generator)
+#+end_src
 **** Markup filter
 Remove the quote block
 #+BEGIN_SRC emacs-lisp
