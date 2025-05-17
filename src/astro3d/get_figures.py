@@ -7,6 +7,7 @@ import numpy as np
 import polars as pl
 import polars.selectors as cs
 import seaborn as sns
+import shap
 import xgboost
 from cp_measure.bulk import get_core_measurements
 from joblib import Parallel, delayed
@@ -197,10 +198,11 @@ sns.violinplot(
 plt.gca().spines[["right", "top"]].set_visible(False)
 plt.savefig(figs_path / "astro3d.svg")
 
-import shap
 
 pred = model.predict(Xd, output_margin=True)
-explainer = shap.TreeExplainer(model, feature_names=data.columns)
+explainer = shap.TreeExplainer(
+    model, feature_names=[x.replace("_", " ") for x in data.columns]
+)
 explanation = explainer(Xd)
 shap_values = explanation.values
 # make sure the SHAP values add up to marginal predictions
@@ -211,3 +213,54 @@ plt.title("Impactful features")
 plt.text(0.4, -0.5, acc, fontweight="bold")
 plt.tight_layout()
 plt.savefig(figs_path / "shap.svg")
+
+# %% example figure
+axd = plt.figure(layout="constrained").subplot_mosaic(
+    """
+    AC
+    BB
+    """
+)
+i = 1
+img = imread(pairs[i][1]).max(axis=0)
+labels = imread(pairs[i][0]).max(axis=0)
+print(labels.max())
+axd["A"].imshow(img)
+axd["A"].axis("off")
+axd["A"].set_title("Z-projected image")
+axd["C"].imshow(labels)
+axd["C"].axis("off")
+axd["C"].set_title("Labels")
+shap.plots.beeswarm(explanation, max_display=6, ax=axd["B"], plot_size=None)
+axd["B"].set_yticklabels(axd["B"].get_yticklabels(), rotation=30)
+plt.text(0.15, -0.5, acc, fontweight="bold")
+# plt.tight_layout()
+plt.savefig(figs_path / "example_shap.svg")
+plt.close()
+# %%
+import matplotlib.pyplot as plt
+import numpy as np
+
+# prepare some coordinates
+x, y, z = np.indices((8, )
+
+# draw cuboids in the top left and bottom right corners, and a link between
+# them
+cube1 = (x < 3) & (y < 3) & (z < 3)
+cube2 = (x >= 5) & (y >= 5) & (z >= 5)
+link = abs(x - y) + abs(y - z) + abs(z - x) <= 2
+
+# combine the objects into a single boolean array
+voxelarray = cube1 | cube2 | link
+
+# set the colors of each object
+colors = np.empty(voxelarray.shape, dtype=object)
+colors[link] = 'red'
+colors[cube1] = 'blue'
+colors[cube2] = 'green'
+
+# and plot everything
+ax = plt.figure().add_subplot(projection='3d')
+ax.voxels(voxelarray, facecolors=colors, edgecolor='k')
+
+plt.show()
