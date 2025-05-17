@@ -12,6 +12,7 @@ dependencies = [
     "jump-portrait>=0.0.27",
     "pillow>=11.2.1",
     "polars>=1.29.0",
+    "polars-ds>=0.8.3",
     "scikit-learn>=1.6.1",
     "seaborn>=0.13.2",
     "shap>=0.47.2",
