@@ -1,4 +1,4 @@
-% Created 2025-05-16 Fri 08:56
+% Created 2025-05-17 Sat 12:54
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -133,7 +133,7 @@ Next, we used the segmentation masks to calculate the cp\_measure features. Then
 
 \begin{figure}[htbp]
 \centering
-\includesvg[width=.9\linewidth]{./figs/astro3d}
+\includesvg[width=.9\linewidth]{./figs/jump_r2_examples}
 \caption{\label{fig:org7fe862f}{[}Placeholder] Comparison of CellProfiler and cp\_measure.}
 \end{figure}
 \subsection{Results and examples of usage}
@@ -145,12 +145,12 @@ As a demonstration of its ease of use, we used cp\_measure for featurization in 
 
 \begin{figure}[htbp]
 \centering
-\includesvg[width=.9\linewidth]{./figs/shap}
+\includesvg[width=.9\linewidth]{./figs/example_shap}
 \caption{\label{fig:org4620d4d}Shapley values of most important features to classify the day in which an image was taken (a multi-class classification task). The test data accuracy is shown in bold. Our results showcased the axis length of the cell to be a major indicator of phenotypic effect, implying that cells became more elongated on their minor axis.}
 \end{figure}
 \subsubsection{Applicability on spatial transcriptomics}
 \label{sec:org1d0d8b8}
-A key advantage of providing these CellProfiler-like measurements as a standalone Python package is their ease of integration into diverse analytical workflows, which otherwise would require substantial adaptation to the standard CellProfiler environment. The recent proliferation of black-box foundation models trained solely on morphological data highlights morphology as a highly informative and predictive modality. However, the feature vectors produced by these models are typically not interpretable, preventing direct biological assessment. In contrast, classical morphological measurements yield explicit, interpretable readouts—for instance, the co-localization of fluorescent markers—facilitating clear biological interpretations.
+A key advantage of providing these CellProfiler measurements as a standalone Python package is their ease of integration into diverse analytical workflows, which otherwise would require substantial adaptation to the standard CellProfiler environment. The recent proliferation of black-box foundation models trained solely on morphological data highlights morphology as a highly informative and predictive modality. However, the feature vectors produced by these models are typically not interpretable, preventing direct biological assessment. In contrast, classical morphological measurements yield explicit, interpretable readouts—for instance, the co-localization of fluorescent markers—facilitating clear biological interpretations.
 
 To demonstrate this utility, we integrated our cp\_measure-based feature extraction into the widely used spatial analysis library Squidpy [CITE]. Being standalone allowed seamless incorporation into workflows powered by the robust SpatialData [CITE] framework underlying Squidpy. Because spatial datasets often comprise significantly more cells per field-of-view (FOV) than conventional microscopy screenings—up to approximately 100,000 cells-traditional software typically cannot process these large images without cropping, which introduces boundary artifacts. Leveraging the modular design of cp\_measure, we parallelized feature extraction at the single-cell level, streaming batches of cells across computational cores. This approach enables efficient computation even on large-scale datasets, a feat not achievable with standard CellProfiler software.
 

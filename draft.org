@@ -144,7 +144,7 @@ Next, we used the segmentation masks to calculate the cp_measure features. Then 
 
 #+CAPTION: [Placeholder] Comparison of CellProfiler and cp_measure. 
 #+NAME: fig:cp_vs_cpmeasure
-[[./figs/astro3d.svg]]
+[[./figs/jump_r2_examples.svg]]
 
 ** Results and examples of usage
 *** Classification of astrocytes and their distinctive features
@@ -154,7 +154,7 @@ As a demonstration of its ease of use, we used cp_measure for featurization in a
 
 #+CAPTION: Shapley values of most important features to classify the day in which an image was taken (a multi-class classification task). The test data accuracy is shown in bold. Our results showcased the axis length of the cell to be a major indicator of phenotypic effect, implying that cells became more elongated on their minor axis. 
 #+NAME: fig:astrocytes
-[[./figs/shap.svg]]
+[[./figs/example_shap.svg]]
 
 *** Applicability on spatial transcriptomics
 # Beyond morphology screening: Spatial transcriptomics data (Tim's data and analysis)
