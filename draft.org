@@ -112,7 +112,7 @@ The main target users of such a tool would be biologists in need of automation a
 
 With cp_measure isolated the now-standard methods for bioimage analysis: One object and one imaging channel (e.g., intensity), one object and multiple channels (e.g., Manders correlation) and multiple objects (e.g., number of neighbors). 
 
-#+CAPTION: Our library cp_measure produces features from images by using the local information in every region of interest. This can be used to featurize the pairwise combination of all the available channels.
+#+CAPTION: Our library $$cp_measure$$ produces features from images by using the local information in every region of interest. This can be used to featurize the pairwise combination of all the available channels.
 #+NAME: fig:overview
 [[./figs/cpmeasure_overview.svg]]
 
@@ -130,7 +130,7 @@ First, we validate cp_measure features versus CellProfiler results with a subset
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
 ** Our features match CellProfiler standard measurements
 
-#+CAPTION: We recapitulate the CellProfiler features. *Left panel.* Representative examples comparing Cellprofiler feature values to cp_measure, obtained from the same sets of masks and images. *Right panel.* $$R^2$$ value of a linear fit for each individual feature, comparing cp_measure to cellprofiler.
+#+CAPTION: We recapitulate the CellProfiler features. *Left panel.* Representative examples comparing Cellprofiler feature values to $$cp_measure$$, obtained from the same sets of masks and images. *Right panel.* $$R^2$$ value of a linear fit for each individual feature, comparing $$cp_measure$$ to CellProfiler.
 #+NAME: fig:cp_vs_cpmeasure
 [[./figs/jump_r2_examples.svg]]
 
