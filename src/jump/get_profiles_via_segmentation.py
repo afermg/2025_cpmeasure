@@ -19,11 +19,11 @@ from joblib import Parallel, delayed
 from skimage.io import imread
 from tqdm import tqdm
 
-out_dir = Path("/datastore/alan/cp_measure/")
-img_dir = out_dir / "jump_subset"
-mask_dir = out_dir / "jump_masks"
-profiles_dir = out_dir / "profiles"
-for folder in (img_dir, mask_dir, profiles_dir):
+output_dir = Path("/datastore/alan/cp_measure/")
+img_dir = output_dir / "jump_subset"
+mask_dir = output_dir / "jump_masks"
+profiles_dir = output_dir / "profiles"
+for folder in (img_dir, mask_dir, results_dir):
     folder.mkdir(exist_ok=True, parents=True)
 
 
@@ -187,17 +187,6 @@ for mask, img in combs:
     assert (
         np.load(out_dir / img.parent.name / mask)["arr_0"].shape == imread(img).shape
     ), "error"
-measure_results = Parallel(n_jobs=-1)(
-    delayed(apply_measurements)(out_dir / img.parent.name / m, img)
-    for m, img in tqdm(combs[:10])
-)
-first_set = pl.concat(measure_results)
-first_set.write_parquet(profiles_dir / "first_set.parquet")
-# multichannel
-
-MEASUREMENTS_TYPE2 = get_correlation_measurements()
-
-# multimask
 # table = table.append_column(
 #     "object",
 #     pa.array([step_name.split("_")[-1]] * len(table), pa.string()),
@@ -207,3 +196,14 @@ MEASUREMENTS_TYPE2 = get_correlation_measurements()
 type2_pairs = [list(product((k, combinations(v, 2)))) for k, v in pairs]
 type2_pairs = [list(product((k, combinations(v, 2)))) for k, v in pairs]
 type2_pairs = [list(product((k, combinations(v, 2)))) for k, v in pairs]
+measure_results = Parallel(n_jobs=-1)(
+    delayed(apply_measurements)(out_dir / img.parent.name / m, img)
+    for m, img in tqdm(combs)
+)
+first_set = pl.concat(measure_results)
+first_set.write_parquet(profiles_dir / "first_set.parquet")
+# multichannel
+
+MEASUREMENTS_TYPE2 = get_correlation_measurements()
+
+# multimask

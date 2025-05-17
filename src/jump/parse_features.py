@@ -74,4 +74,4 @@ def get_feature_groups(
         orient="row",
     )
 
-ee    return feature_meta.with_columns(fullname=pl.Series(feature_fullnames))
+    return feature_meta.with_columns(fullname=pl.Series(feature_fullnames))
