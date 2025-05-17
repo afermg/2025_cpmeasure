@@ -26,7 +26,7 @@
 \icmlsetsymbol{equal}{*}
 
 \begin{icmlauthorlist}
-\icmlauthor{Alan F. Munoz}{broad}
+\icmlauthor{Al\'an F. Munoz}{broad}
 \icmlauthor{Tim Treis}{hh,broad}
 \icmlauthor{Alexandr A. Kalinin}{broad}
 \icmlauthor{Shatavisha Dasgupta}{broad}
@@ -95,29 +95,24 @@ In this space there is a vacuum for a software library that covers the generalis
 Other recent software has been published aiming to fill this unoccupied niche, but their solutions are unsuitable for practical usage at scale: First, their features have completely independent implementations from the original ones, thus are not guaranteed to reproduce existing results and the biological interpretations may be different from the current field standard. Additionally, their implementations are not modular nor scale well upon increases to the data size. Some of them, akin to Distributed CellProfiler, are based on main use-case is cloud services.
 
 ** Engineered features in the era of deep learning
-The unprecedented evolution of deep learning methods in recent years has made available many different ways to process imaging data. Nevertheless, these are limited in their capacity to provide biological interpretation [cite:@moenDeepLearningCellular2019].
-
 # Directly mathematically interpretable
-Unlike with deep learning-based features, whose interpretation requires complex methods such as counterfactuals or attention maps, most of the engineered features have a mathematical definition that is vastly simpler to translate into biological insights.
-
+# DL limitations
 # DL is not always better-performing
-Engineered features can also outperform deep learning ones under some conditions [cite:@tangMorphologicalProfilingDrug2024]. Even if deep learning features improve over the coming years, they will most likely require more complex interpretability methods, if they are interpretable at all.
-
 # DL requires training on a given dataset and appropriate samples may not be available for training and it’s a pain
-It also has a higher barrier of entry, since most models require annotating data for training and testing. Even new foundational models do not generalize well for out-of-distribution data.
+
+The unprecedented evolution of deep learning methods in recent years has made available many different ways to process imaging data. Nevertheless, these are limited in their capacity to provide biological interpretation [cite:@moenDeepLearningCellular2019]. Engineered features can also outperform deep learning ones under some conditions [cite:@tangMorphologicalProfilingDrug2024]. Even as deep learning features improve over time, they still require complex interpretability methods, if they are interpretable at all. Deep Learning also has a higher barrier of entry, since most models require annotating data for training and testing. The foundational models that aim to solve this do not generalize well for out-of-distribution data. Unlike with deep learning-based features, whose interpretation requires complex methods such as counterfactuals or attention maps, most of the engineered features have a mathematical definition that is vastly simpler to translate into biological insights.
+
 
 # Target users: biologists seeking automation and reproducibility, CS/Data scientists needing APIs to build their pipelines
-The main target users of such a tool would be biologists in need of automation and reproducibility, as well as computer and data scientists that want to dive into the field of biological imaging.
-
 # Importance of these features for ML/DL pipelines in cell microscopy data
-As a whole, there is still a role to be played for engineered features. The community is missing a generalist tool that converts images and masks into vectors in an automated fashion and portable across fields. It serves as complementary approach deep learning methods.
+The main target users of such a tool would be biologists in need of automation and reproducibility, as well as computer and data scientists that want to dive into the field of biological imaging. As a whole, there is still a role to be played for engineered features. The community is missing a generalist tool that converts images and masks into vectors in an automated fashion and portable across fields. It stands as a complement to deep learning methods.
 
 * Extraction of interpretable features using cp_measure
 # Measurement parity with CellProfiler extending from original implementation
 
-With cp_measure we recapitulated all features used in the vast majority of experiments: One object and one imaging channel (e.g., intensity), one object and multiple channels (e.g., Manders correlation) and multiple objects (e.g., number of neighbors). 
+With cp_measure isolated the now-standard methods for bioimage analysis: One object and one imaging channel (e.g., intensity), one object and multiple channels (e.g., Manders correlation) and multiple objects (e.g., number of neighbors). 
 
-#+CAPTION: Extraction of measurements based on a collective of objects. cp_measure generates features from images by using the local information in a mask-defined region of interest. Its produces measurements for every object, and is usually used to acquire information on the pairwise combination of all the available channels.
+#+CAPTION: Our library cp_measure produces features from images by using the local information in every region of interest. This can be used to featurize the pairwise combination of all the available channels.
 #+NAME: fig:overview
 [[./figs/cpmeasure_overview.svg]]
 
@@ -127,26 +122,23 @@ The cp_measure's code base was based on CellProfiler's, but we removed the secti
 # Scikit-image style API for ease of use
 Our library aims to remain consistent with the current scientific python ecosystem. The main interface matches that of the widely-used scikit-image [cite:@waltScikitimageImageProcessing2014]. This greatly reduces the effort needed to integrate it in existing workflows and tools.
   
-By isolating and cleaning the implemented mathematics of CellProfiler we aim to make the measurement methods more accessible to computer and data scientists, while still leveraging the decade and a half of existing features that are present in numerous datasets, maintaining a higher degree of compatibility. To retain this compatibility in the long term requires contributing this changes back into CellProfiler, be it directly or as a dependency.
-
-# Faster than CellProfiler (May require brief benchmarking)
-When comparing the equivalent pipelines, cp_measure's minimal overhead results in faster processing times than CellProfiler (TODO add benchmark).
+By isolating and cleaning the implemented mathematics of CellProfiler we vastly reduce the amount of time and manual effort required to perform data analyses, while also providing the features present in numerous datasets. To retain this compatibility in the long term requires contributing this changes back into CellProfiler, be it directly or as a dependency.
 
 # Overview of usage
-We demonstrate the correlation of cp_measure compared to a comparable CellProfiler pipeline using a representative subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we demonstrate cases in which cp_measure can help identify biological phenotypes: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability. 
+First, we validate cp_measure features versus CellProfiler results with a subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we showcase cases in which cp_measure is a more practical choice to process microscopy data: first using 3D images of astrocytes and then using spatial transcriptomics dataset. These use-cases demonstrate its widespread applicability. 
 
 # JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
 ** Our features match CellProfiler standard measurements
 
-Our first aim was to validate the features from cp_measure compared to the CellProfiler standard ones. We used images from the JUMP dataset, containing more than 130,000 chemical and genetic perturbations. We first curated a set of genetic perturbations that, based on existing analyses, contained cells with distinctive morphologies to all others based on the CellProfiler features. Using this curated dataset, we segmented the cytosol and nuclei of the cells using a CellProfiler pipeline to obtain both segmentation masks and the original morphological features.
-
-Next, we used the segmentation masks to calculate the cp_measure features. Then we mapped the features from CellProfiler to cp_measure and compared the values in both. Figure [[fig:cp_vs_cpmeasure]] shows this comparison. Then we demonstrate that we recapitulate the CellProfiler features.
-
-#+CAPTION: [Placeholder] Comparison of CellProfiler and cp_measure. 
+#+CAPTION: We recapitulate the CellProfiler features. *Left panel.* Representative examples comparing Cellprofiler feature values to cp_measure, obtained from the same sets of masks and images. *Right panel.* $$R^2$$ value of a linear fit for each individual feature, comparing cp_measure to cellprofiler.
 #+NAME: fig:cp_vs_cpmeasure
 [[./figs/jump_r2_examples.svg]]
 
+We first performed a numerical validation of cp_measure, relative to the original CellProfiler features. To do so, used curated a subset of 150 perturbations from the JUMP dataset, selecting the genetic perturbations with the most distinctive features. To ensure that we are using the exact same object masks, we segmented these images to obtain the cells and nuclei using CellProfiler, which yielded both morphological profiles and object masks. Next, we applied our measurements these masks with the original images and mapped the features from cp_measure to CelProfiler. Figure [[fig:cp_vs_cpmeasure]] shows some examples of the feature comparison alongside the $$R^2$$ value of a linear fit for all the mapped features.
+
 ** Results and examples of usage
+We showcase a couple of use-cases in which cp_measure makes our machine-learning workflows faster and integrate better with existing tools.
+
 *** Classification of astrocytes and their distinctive features
 
 # Extracting features from 3D data (Alex's data, Alan's short analysis)
@@ -160,18 +152,15 @@ As a demonstration of its ease of use, we used cp_measure for featurization in a
 # Beyond morphology screening: Spatial transcriptomics data (Tim's data and analysis)
 A key advantage of providing these CellProfiler measurements as a standalone Python package is their ease of integration into diverse analytical workflows, which otherwise would require substantial adaptation to the standard CellProfiler environment. The recent proliferation of black-box foundation models trained solely on morphological data highlights morphology as a highly informative and predictive modality. However, the feature vectors produced by these models are typically not interpretable, preventing direct biological assessment. In contrast, classical morphological measurements yield explicit, interpretable readouts—for instance, the co-localization of fluorescent markers—facilitating clear biological interpretations.
 
-To demonstrate this utility, we integrated our cp_measure-based feature extraction into the widely used spatial analysis library Squidpy [CITE]. Being standalone allowed seamless incorporation into workflows powered by the robust SpatialData [CITE] framework underlying Squidpy. Because spatial datasets often comprise significantly more cells per field-of-view (FOV) than conventional microscopy screenings—up to approximately 100,000 cells-traditional software typically cannot process these large images without cropping, which introduces boundary artifacts. Leveraging the modular design of cp_measure, we parallelized feature extraction at the single-cell level, streaming batches of cells across computational cores. This approach enables efficient computation even on large-scale datasets, a feat not achievable with standard CellProfiler software.
+To demonstrate this utility, we integrated our cp_measure-based feature extraction into the widely used spatial analysis library Squidpy (CITE). Being standalone allowed seamless incorporation into workflows powered by the robust SpatialData (CITE) framework underlying Squidpy. Because spatial datasets often comprise significantly more cells per field-of-view (FOV) than conventional microscopy screenings—up to approximately 100,000 cells-traditional software typically cannot process these large images without cropping, which introduces boundary artifacts. Leveraging the modular design of cp_measure, we parallelized feature extraction at the single-cell level, streaming batches of cells across computational cores. This approach enables efficient computation even on large-scale datasets, a feat not achievable with standard CellProfiler software.
 
-To further illustrate the value of morphological features, we evaluated their impact on cell-type prediction tasks using spatial transcriptomics data. This application is particularly compelling, as current spatial transcriptomics technologies typically produce matched histological images that remain largely underutilized beyond visualization. We analyzed two mouse brain datasets generated by Bruker Spatial's CosMx platform [CITE, https://nanostring.com/products/cosmx-spatial-molecular-imager/ffpe-dataset/cosmx-smi-mouse-brain-ffpe-dataset/]. Each dataset comprises expression profiles for 960 genes and immunofluorescence images captured via five distinct fluorescent probes ('Histone', 'DNA', 'GFAP', 'G', 'rRNA'). Morphological features were extracted from these 5-channel images for both datasets. Subsequently, both gene expression and morphological data were preprocessed according to best practices established by Scanpy [CITE] and PyCytoMiner [CITE], respectively. We trained an XGBoost model to predict cell types on the larger dataset (48,556 cells; see Fig. XXX, panel XXX), comparing models using either gene expression alone or combined gene expression and morphological data. Model performance was assessed by predicting cell types in a smaller independent dataset (38,996 cells), using the F1-score metric stratified by cell type. Figure XXX (panel XXX) highlights the improved predictive accuracy obtained when morphological features are included. Importantly, this performance enhancement required no additional experimental effort, underscoring the benefit of employing cp\_measure beyond its traditional scope.
+To further illustrate the value of morphological features, we evaluated their impact on cell-type prediction tasks using spatial transcriptomics data. This application is particularly compelling, as current spatial transcriptomics technologies typically produce matched histological images that remain largely underutilized beyond visualization. We analyzed two mouse brain datasets generated by Bruker Spatial's CosMx platform (CITE https://nanostring.com/products/cosmx-spatial-molecular-imager/ffpe-dataset/cosmx-smi-mouse-brain-ffpe-dataset/). Each dataset comprises expression profiles for 960 genes and immunofluorescence images captured via five distinct fluorescent probes ('Histone', 'DNA', 'GFAP', 'G', 'rRNA'). Morphological features were extracted from these 5-channel images for both datasets. Subsequently, both gene expression and morphological data were preprocessed according to best practices established by Scanpy (CITE) and PyCytoMiner (CITE) respectively. We trained an XGBoost model to predict cell types on the larger dataset (48,556 cells; see Fig. XXX, panel XXX), comparing models using either gene expression alone or combined gene expression and morphological data. Model performance was assessed by predicting cell types in a smaller independent dataset (38,996 cells), using the F1-score metric stratified by cell type. Figure XXX (panel XXX) highlights the improved predictive accuracy obtained when morphological features are included. Importantly, this performance enhancement required no additional experimental effort, underscoring the benefit of employing cp_measure beyond its traditional scope.
 
 #+CAPTION: [PLACEHOLDER] Spatial omics analysis.
 #+NAME: fig:spatial_omics
 [[./figs/spatial.png]]
 
 * Discussion
-#  The goal is to import it back into CP eventually anyway, so this feels very clean
-# "Proposals for better workflows or incentives for open-source development and maintenance in ML"
-
 # Reproducibility through code-based workflows
 # Reduced reliance on GUI interfaces
 The usage of image analysis pipelines that require manual setups hinders reproducibility and hinders our ability to compare different datasets. In this work we introduced our new library cp_measure, which provides widely used engineered features and enables simpler automated analyses of microscopy data in either short scripts and complex pipelines. This also removes the requirement of using graphical interfaces to process microscopy data, resulting in better scaling capabilities for high-content microscopy data without the need of cloud-based infrastructure.
