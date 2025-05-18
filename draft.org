@@ -105,7 +105,7 @@ The unprecedented evolution of deep learning methods in recent years has made av
 # Importance of these features for ML/DL pipelines in cell microscopy data
 The core target users of such a tool would be biologists and data scientists who need reproducibility and data within a few lines of code. As a whole, there is still a role to be played for engineered features to, at the very least, complement deep learning ones. The community is missing a generalist tool that converts images and masks into representative vectors without the need of interfaces or cloud compute and that integrates seamlessly with other scientific libraries. This is the role that we envision cp_measure can occupy in the scientific software ecosystem.
 
-* Extraction of interpretable features using cp_measure
+* Extracting interpretable features
 # Measurement parity with CellProfiler extending from original implementation
 
 In cp_measure, we isolated the CellProfiler measurements and categorize them based on their inputs: One object and one imaging channel (e.g., intensity, texture), one object and multiple channels (such as correlation features) and multiple objects (e.g., number of neighbors).

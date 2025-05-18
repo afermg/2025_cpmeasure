@@ -1,4 +1,4 @@
-% Created 2025-05-17 Sat 20:18
+% Created 2025-05-17 Sat 20:28
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -95,8 +95,8 @@ There is the need for a software library that covers the generalist and high thr
 The unprecedented evolution of deep learning methods in recent years has made available many different ways to process imaging data. Nevertheless, these are limited in their capacity to provide biological interpretation \citep{moenDeepLearningCellular2019}. Engineered features can also outperform deep learning ones under certain conditions \citep{tangMorphologicalProfilingDrug2024}. Even as deep learning features improve over time, they still require complex interpretability methods, in the rare case where they can be interpreted. Deep Learning also has a higher barrier of entry, since most models require annotating data for training and testing. The foundational models whose goal is to bypass this step do not generalize well for out-of-distribution data. Unlike deep learning-based features, whose interpretation requires complex methods such as counterfactuals or attention maps, most of the engineered features have a mathematical definition that is vastly simpler to translate into biological insights.
 
 The core target users of such a tool would be biologists and data scientists who need reproducibility and data within a few lines of code. As a whole, there is still a role to be played for engineered features to, at the very least, complement deep learning ones. The community is missing a generalist tool that converts images and masks into representative vectors without the need of interfaces or cloud compute and that integrates seamlessly with other scientific libraries. This is the role that we envision cp\_measure can occupy in the scientific software ecosystem.
-\section{Extraction of interpretable features using cp\_measure}
-\label{sec:org5633614}
+\section{Extracting interpretable features}
+\label{sec:org61842b5}
 In cp\_measure, we isolated the CellProfiler measurements and categorize them based on their inputs: One object and one imaging channel (e.g., intensity, texture), one object and multiple channels (such as correlation features) and multiple objects (e.g., number of neighbors).
 
 \begin{figure}[htbp]
