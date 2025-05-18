@@ -64,6 +64,12 @@ This ensures that section labels are determinisitic.
   (defun seed-random-generator (_) (random "a fixed and unchanging string"))
   (add-hook 'org-export-before-processing-hook #'seed-random-generator)
 #+end_src
+**** Prefer user labels
+Set the labels in drawers as custom ids.
+#+begin_src emacs-lisp
+  (setq org-latex-prefer-user-labels t)
+#+end_src
+
 **** Markup filter
 Remove the quote block
 #+BEGIN_SRC emacs-lisp
