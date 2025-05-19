@@ -8,7 +8,7 @@
 
 #+begin_export latex
 \twocolumn[
-\icmltitle{cp\_measure: Morphological features for bioimaging}
+\icmltitle{cp\_measure: Morphological profiling for data scientists}
 
 % It is OKAY to include author information, even for blind
 % submissions: the style file will automatically remove it for you
@@ -26,7 +26,7 @@
 \icmlsetsymbol{equal}{*}
 
 \begin{icmlauthorlist}
-\icmlauthor{Al\'an F. Munoz}{broad}
+\icmlauthor{Al\'an F. Mu\~{n}oz}{broad}
 \icmlauthor{Tim Treis}{hh,broad}
 \icmlauthor{Alexandr A. Kalinin}{broad}
 \icmlauthor{Shatavisha Dasgupta}{broad}
@@ -69,29 +69,29 @@ Quantifying the contents of objects in images is a common challenge in biologica
 
 * Introduction
 # What is morphological profiling
-The field of biological imaging leverages data from cell microscopy images to obtain biological insights. Microscopy techniques allows us to acquire information from a multitude of sources, such as illumination, fluorescent dyes or even proteins tagged with other proteins that fluoresce, acting as a beacon and providing information on quantity and/or localization.
+The field of biological imaging leverages data from cell microscopy images to obtain biological insights. Modern microscopes can capture a wisde range of information, such as illumination and fluorescence. When coupled with fluorescence dyes or proteins biologists are able to observe the location and distribution of cells and organelles.
 
-The main task at the core bioimage analysis is identifying features that convey information of the state of a cell or its contents. This entails combining identified objects with pixel data to quantify their morphology and other information sources, such as intensity distributions.
+The main purpose of image analysis in the context of biology is to characterize the cell state or its components. Early on, human eyes where the sole judge on this, but a more objective, scalable and reproducible method was required. This commonly entailed identifying regions of interest and calculating metrics that represent these regions, such as intensity distributions.
 
-Morphological profiling a subfield of bioimaging that focuses on the cells and the shapes and properties of their organelles. It is usually supported by both statistical methods and machine and deep learning approaches. One of its biggest applications is drug discovery, where it is used primarily due to its low acquisition cost and capabilities for scaling to screen many compounds efficiently [cite:@sealDecadeSystematicReview2024]. It can also complement to other high throughput methods, such as genomic sequencing.
+Morphological profiling is a technique where we generate a large number of shape nad intensity features for all objects, cells or otherwise. These features are fed into statistical or machine learning methods to identify patterns. One of its biggest applications is drug discovery, where scientists leverages microscopy's low acquisition cost and high throughput [cite:@sealDecadeSystematicReview2024]. Morphological profiling serves not only as validation but also as information orthogonal to other high throughput methods, such as genomic sequencing.
 
 ** The current state of bioimage analysis
 # what is CP
-The most widely used software to process biological imaging data is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its target users are biologists with limited programmatic expertise. While this has been of great benefit for biologists, it has a number of issues that hamper its usability in many contexts.
-
 # Why is it not sufficient
-CellProfiler elicits a higher degree of friction for composite pipelines that orchestrate multiple tools. Its focus on manually-defined workflows adjusted for specific use-cases makes it less suitable for low-customization high throughput analyses, more so since the development of generalist segmentation methods and foundational models. Additionally, its large number of dependencies, which include modules from both the Python and Java, can increase the complexity of setup if one is to integrate CellProfiler with other tools. Tough containerisation mitigates this problem, they are not without their own complexity and caveats.
+The most widely used software to process biological images is CellProfiler [cite:@stirlingCellProfiler4Improvements2021]. Its intended audience is experimental biologists with scant programmatic experience, for whom it has been a boon. In contrast, its usefulness greatly diminishes for computer-savvy scientists who fear no command line. For them, CellProfiler means friction in pipelines comprised of multiple tools. Its catering for manually-defined workflows unbefits low-customization high throughput analyses, which are prevalent in the age of generalist segmentation and foundational models.
+
+# Human intervention
+# A standard CellProfiler workflow often requires human intervention. Its feedback loop of inpecting and parameterizing data makes it easy to adjust parameters for a given dataset, but opens the door to human mistakes and hinders reproducibility between them. CellProfiler's batch mode requires an entire working existing pipeline, and still requires manual adjustments to work on new data. 
 
 # Current limitations of the field
-Though certain morphological features can be obtained using scikit-image, these are a fraction of the current standard and cannot be directly compared to the existing datasets produced using CellProfiler. Another challenge resultant of using CellProfiler is its dependency on human interaction at multiple points, which provides the ability of inspecting and parameterizing data but opens the door to human mistakes and hindering reproducibility.
-
-# cp is limited as  pluggable tool
-A CellProfiler pipeline struggles integrating well with other computational tools. Its existing plug-in system is inaccessible for most users and has strong limitations. Building automated pipelines that contain CellProfiler and integrating tools within its components are time and effort-consuming challenges that require a decent understanding of its interfaces. Treating it as a black box is an option, but its adding functionality, such as adding a custom-made image filter is not possible.
+A CellProfiler pipeline struggles integrating well with other computational tools. Building plug-ins to add functionality is time and effort-consuming challenges that require an understanding of its interfaces. Treating it as a black box and using its output precludes the addition of custom-made image filters. Lastly, CellProfiler depends on many number of packages from both Python and Java, amplifying the risk of dependency conflicts. Containers mitigate this problem, but not without increased complexity and caveats. To summarize, CellProfiler is an all-or-nothing tool, integrating other tools demands more work and time than most scientists can spare.
 
 # Why do we need something like cp measure
 # Existing attempts
+# cp is limited as  pluggable tool
+# Distributed CellProfiler would cover this case if not for its cloud-only approach and dependency on preconfigured pipelines, as well as its limited debugging capabilities [cite:@mcquinCellProfiler30Nextgeneration2018].
 
-There is the need for a software library that covers the generalist and high throughput use-cases for which CellProfiler is inadequate. Distributed CellProfiler would cover this case if not for its cloud-only approach and dependency on preconfigured pipelines, as well as its limited debugging capabilities [cite:@mcquinCellProfiler30Nextgeneration2018]. Some tools, such as ScaleFex [cite:@comoletHighlyEfficientScalable2024], attempt to fill this gaping hole in the biological software, but they have limitations: First, their features have completely independent implementations from the original ones, thus are not reproduce existing results and the biological interpretations may be different from the current field standard. Additionally, their implementations are usually an off-the-shelf solution, which works well if they match our use-case, but they are not modular nor usually scale well upon increases to the data size. Other alternatives are directed at cloud-first and neglect the use-cases for which local compute would suffice.
+Object featurization is not exclusive of CellProfiler. For example, scikit-image can produce some overlapping features. Tools like ScaleFex [cite:@comoletHighlyEfficientScalable2024;@einarolafssonSpaCr2025] generate features, but they have limitations: First, their implementation is completely independent and thus cannot reproduce existing datasets, potentially impacting the biological interpretations. Moreover, it enforces a specific data or metadata structure, which also adds complexity to the setup. Lastly, a common pattern profilers akin to ScaleFex is that they enforce a specific shape for the input data and require wrangling with the data before processing a single image. Some alternatives, such as ScaleFex, are designed for cloud usage, neglectling a significant number of cases where local compute suffices. We thus believe that there is the need for a tool aimed at generalist and high throughput problems not being solved by the current software ecosystem.
 
 ** Engineered features in the era of deep learning
 # Directly mathematically interpretable
