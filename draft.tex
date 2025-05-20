@@ -1,4 +1,4 @@
-% Created 2025-05-20 Tue 10:41
+% Created 2025-05-20 Tue 10:48
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -98,7 +98,7 @@ We build cp\_measure by extracting the CellProfiler measurements from the code b
 \begin{figure}[htbp]
 \centering
 \includesvg[width=.9\linewidth]{./figs/cpmeasure_overview}
-\caption{\label{fig:overview}cp\_measure generates features from images by using the local information in every region of interest. It is commonly used to featurise the pairwise combination of all the available channels and objects. The resultant matrices represent the entire experiment and can be studied using machine and deep learning methods.}
+\caption{\label{fig:overview}cp\_measure generates features from images by using the local information in every region of interest. It is commonly used to featurize the pairwise combination of all the available channels and objects. The resultant matrices represent the entire experiment and can be studied using machine and deep learning methods.}
 \end{figure}
 
 By isolating the numerical from the graphical and orchestration components we improved reusability, testability and extensibility. We positioned it to become a stepping stone to make the morphological profiling numerical methods accessible to the data science community. Given that the numerical internals are more transparent, we reduced the amount of time and human effort required to integrate it into pipelines, while still retaining the standard features already present in numerous datasets.
