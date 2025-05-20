@@ -1,4 +1,4 @@
-% Created 2025-05-20 Tue 11:43
+% Created 2025-05-20 Tue 11:51
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -103,8 +103,6 @@ We build cp\_measure by extracting the CellProfiler measurements from the code b
 \end{figure}
 
 By isolating the numerical from the graphical and orchestration components we improved reusability, testability and extensibility. We positioned it to become a stepping stone to make the morphological profiling numerical methods accessible to the data science community. Given that the numerical internals are more transparent, we reduced the amount of time and human effort required to integrate it into pipelines, while still retaining the standard features already present in numerous datasets.
-
-Our aim is to remain consistent with the current scientific Python ecosystem. Its interface corresponds that of the widely used scikit-image. This greatly reduces the effort needed to integrate it in existing workflows and tools.
 
 We will now demonstrate the validity and capabilities of cp\_measure in cases that would normally require domain expertise and a considerable amount of time. First, we validate cp\_measure features versus CellProfiler results with a subset of the JUMP dataset \citep{chandrasekaranJUMPCellPainting2023}. Then we showcase cases in which cp\_measure is a more practical choice to process microscopy data: First 3D images of astrocytes and then spatial transcriptomics. These use-cases demonstrate its widespread suitability for different types of problems. 
 \subsection{Recapitulating CellProfiler measurements}

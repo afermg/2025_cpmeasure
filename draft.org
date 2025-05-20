@@ -117,9 +117,6 @@ We build cp_measure by extracting the CellProfiler measurements from the code ba
 # Extensibility
 By isolating the numerical from the graphical and orchestration components we improved reusability, testability and extensibility. We positioned it to become a stepping stone to make the morphological profiling numerical methods accessible to the data science community. Given that the numerical internals are more transparent, we reduced the amount of time and human effort required to integrate it into pipelines, while still retaining the standard features already present in numerous datasets.
 
-# Scikit-image style API for ease of use
-Our aim is to remain consistent with the current scientific Python ecosystem. Its interface corresponds that of the widely used scikit-image. This greatly reduces the effort needed to integrate it in existing workflows and tools.
-
 # Overview of usage
 We will now demonstrate the validity and capabilities of cp_measure in cases that would normally require domain expertise and a considerable amount of time. First, we validate cp_measure features versus CellProfiler results with a subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we showcase cases in which cp_measure is a more practical choice to process microscopy data: First 3D images of astrocytes and then spatial transcriptomics. These use-cases demonstrate its widespread suitability for different types of problems. 
 
@@ -177,6 +174,10 @@ The most obvious way to make cp_measure more useful is to contribute it back to 
 Developing a comprehensive tests suite will guarantee mathematical correctness, which currently not even CellProfiler has. This test suite in turn would in turn expedite improvements in multiple ways: Firstly, optimizing the most compute-consuming features, such as granularity. Later on, we could add to support just-in-time compiling and GPUs.
 
 Long-term, we envision cp_measure can be the place to develop and distribute new measurements. While CellProfiler's measurements are already ubiquitous in bioimaging studies, the existing palette of measurements could be further extended to cover unexplored use-cases. We also see adding community-contributed measurements to better match the current questions scientists pose to imaging data.
+
+# Scikit-image style API for ease of use
+# Our aim is to remain consistent with the current scientific Python ecosystem. Its interface corresponds that of the widely used scikit-image. This greatly reduces the effort needed to integrate it in existing workflows and tools.
+
 
 #+print_bibliography:
 
