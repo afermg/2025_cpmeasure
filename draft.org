@@ -98,7 +98,7 @@ Object featurization is not exclusive of CellProfiler. For example, scikit-image
 # DL is not always better-performing
 # DL requires training on a given dataset and appropriate samples may not be available for training and it’s a pain
 
-The latest deep learning models can streamline image processing. Nevertheless, their capacity to provide biological interpretation is limited [cite:@moenDeepLearningCellular2019]. In some cases, engineered features can even outperform learned ones [cite:@tangMorphologicalProfilingDrug2024]. Compared to engineered features, deep learning approaches have a higher barrier of entry, as most models require annotating data. Foundational models, whose goal is to lower this barrier, fail to generalize well for out-of-distribution data. Unless a major change in neural networks occurs, they will still require more complex interpretability methods. Unlike learned features, whose interpretation requires complex methods like counterfactuals or attention maps, most engineered features have a mathematical definition that is faster to calculate and easier to translate into biological concepts.
+The latest deep learning models can streamline image processing. Nevertheless, their capacity to provide biological interpretation is limited [cite:@moenDeepLearningCellular2019]. In some cases, engineered features can even outperform learned ones [cite:@tangMorphologicalProfilingDrug2024]. Compared to engineered features, deep learning approaches have a higher barrier of entry, as most models require annotating data. Foundational models, whose goal is to lower this barrier, fail to generalize well for out-of-distribution data. Unless a major change in neural networks occurs, they will still require more complex interpretability methods. Unlike learned features, whose interpretation requires complex methods like counterfactual methods or attention maps, most engineered features have a mathematical definition that is faster to calculate and easier to translate into biological concepts.
 
 # Target users: biologists seeking automation and reproducibility, CS/Data scientists needing APIs to build their pipelines
 # Importance of these features for ML/DL pipelines in cell microscopy data
@@ -122,14 +122,14 @@ Our aim is to remain consistent with the current scientific Python ecosystem. It
 # Overview of usage
 We will now demonstrate the validity and capabilities of cp_measure in cases that would normally require domain expertise and a considerable amount of time. First, we validate cp_measure features versus CellProfiler results with a subset of the JUMP dataset [cite:@chandrasekaranJUMPCellPainting2023]. Then we showcase cases in which cp_measure is a more practical choice to process microscopy data: First 3D images of astrocytes and then spatial transcriptomics. These use-cases demonstrate its widespread suitability for different types of problems. 
 
-# JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
 ** Recapitulating CellProfiler measurements
 
+# JUMP data: Recreate data from JUMP where masks are available (JUMP data, Alan's short analysis)
 #+CAPTION: cp_measure features match their CellProfiler analogs. *Left panel.* Representative examples comparing Cellprofiler feature values to cp_measure's, generated using matching pairs of masks and images. *Right panel.* $R^2$ value of a linear fit for each individual feature, comparing cp_measure to CellProfiler.
 #+NAME: fig:cp_vs_cpmeasure
 [[./figs/jump_r2_examples.svg]]
 
-We first performed the numerical validation of cp_measure relative to the original CellProfiler features. For this we collected 300 images corresponding to 150 perturbations from the JUMP dataset, selecting the most significant phenotypes for a given measurement each. To ensure that we are using identical object masks, we segmented these images to obtain the cells and nuclei using CellProfiler, providing object masks and their associated features. Next, we applied cp_measure on these masks with the original images and mapped the features from cp_measure to CellProfiler. Lastly, we calculated a linear fit for the matched features and calculated their $R^2$ value, indicating how well it fits a linear slope.
+We first performed the numerical validation that cp_measure features, for a set of images and masks representative of the possible values, match the original CellProfiler features. For this we collected 300 images corresponding to 150 perturbations from the JUMP dataset, selecting the most significant phenotypes for a given measurement each. To ensure that we are using identical object masks, we segmented these images to obtain the cells and nuclei using CellProfiler, providing object masks and their associated features. Next, we applied cp_measure on these masks with the original images and mapped the features from cp_measure to CellProfiler. Lastly, we calculated a linear fit for the matched features and calculated their $R^2$ value, indicating how well it fits a linear slope.
 
 The initial validation of our cp_measure features is shown on Figure [[fig:cp_vs_cpmeasure]]. The left panel shows examples of the comparison of our features against CellProfiler's. The straight lines demonstrate the recapitulation of measurements from our implementation. A few data points fall outside the diagonals, which hint at some edge-cases are treated differently by either tool. The panel on the right shows the $R^2$ value of a linear interpolation. Given that this value is directly correlated to the correctness of the implementation, we can see that most of our measurements have a linear relationship, regardless of whether the masks were for nuclei or cytosols. This result provides evidence that cp_measure can be confidently in cases where CellProfiler would be used, and the insights are unlikely to change.
 
@@ -179,7 +179,7 @@ Long-term, we envision cp_measure can be the place to develop and distribute new
 
 #+print_bibliography:
 
-* Appendix                                                         :noexport:
+* Appendix                                                        
 ** Methods
 *** Data and software
 The code for cp_measure is available on https://anonymous.4open.science/r/cp_measure-B0DA. All code to reproduce the analyses and figures, alongside links to the original data, is available on the GitHub repository https://github.com/afermg/2025_cpmeasure/. The datasets we produced for this work are available on Zenodo, and the latest version can be found on https://zenodo.org/records/15390631/latest.
