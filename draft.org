@@ -38,6 +38,7 @@
 \icmlaffiliation{broad}{Broad Institute of MIT and Harvard, United States}
 \icmlaffiliation{hh}{Institute of Computational biology, Helmholtz Zentrum München, Germany}
 
+\icmlcorrespondingauthor{Al\'an F. Mu\~{n}oz}{amunozgo@broadinstitute.org}
 \icmlcorrespondingauthor{Shantanu Singh}{shantanu@broadinstitute.org}
 
 % You may provide any keywords that you
