@@ -108,7 +108,7 @@ The intended audience for such a featurization tool would be, in addition to bio
 * Extracting interpretable features
 # Measurement parity with CellProfiler extending from original implementation
 
-We build cp_measure by extracting the CellProfiler measurements from the code base and grouping them based on their inputs: One object and one imaging channel (e.g., intensity, texture), one object and multiple channels (e.g., Pearson correlation) and multiple objects (e.g., number of neighbours).
+In our library cp_measure we extracted the CellProfiler measurements, removed anything that is not essential to solve the image-to-features problem and categorized the measurenents based on their input: One object and one imaging channel (e.g., intensity, texture), one object and multiple channels (e.g., Pearson correlation) and multiple objects (e.g., number of neighbours).
 
 #+CAPTION: cp_measure generates features from images by using the local information in every region of interest. It is commonly used to featurize the pairwise combination of all the available channels and objects. The resultant matrices represent the entire experiment and can be studied using machine and deep learning methods.
 #+NAME: fig:overview

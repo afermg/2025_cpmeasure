@@ -1,4 +1,4 @@
-% Created 2025-05-20 Tue 11:51
+% Created 2025-05-20 Tue 13:14
 % Intended LaTeX compiler: pdflatex
 \documentclass{article}
 
@@ -94,7 +94,7 @@ The latest deep learning models can streamline image processing. Nevertheless, t
 The intended audience for such a featurization tool would be, in addition to biologists, data scientists striving to achieve reproducible data analyses within a few lines of code. As a whole, engineered features still have the role of, at the minimum, complementing deep learning ones. The bioimage software ecosystems lacks a modular tool to convert images into interpretable features with no compulsory graphical interfaces or cloud compute. Ideally it should also harmonize with other scientific libraries. With all this in mind we have developed cp\_measure.
 \section{Extracting interpretable features}
 \label{sec:org61842b5}
-We build cp\_measure by extracting the CellProfiler measurements from the code base and grouping them based on their inputs: One object and one imaging channel (e.g., intensity, texture), one object and multiple channels (e.g., Pearson correlation) and multiple objects (e.g., number of neighbours).
+In our library cp\_measure we extracted the CellProfiler measurements, removed anything that is not essential to solve the image-to-features problem and categorized the measurenents based on their input: One object and one imaging channel (e.g., intensity, texture), one object and multiple channels (e.g., Pearson correlation) and multiple objects (e.g., number of neighbours).
 
 \begin{figure}[htbp]
 \centering
@@ -158,6 +158,7 @@ The most obvious way to make cp\_measure more useful is to contribute it back to
 Developing a comprehensive tests suite will guarantee mathematical correctness, which currently not even CellProfiler has. This test suite in turn would in turn expedite improvements in multiple ways: Firstly, optimizing the most compute-consuming features, such as granularity. Later on, we could add to support just-in-time compiling and GPUs.
 
 Long-term, we envision cp\_measure can be the place to develop and distribute new measurements. While CellProfiler's measurements are already ubiquitous in bioimaging studies, the existing palette of measurements could be further extended to cover unexplored use-cases. We also see adding community-contributed measurements to better match the current questions scientists pose to imaging data.
+
 
 \bibliographystyle{icml2025}
 \bibliography{bibliography}
