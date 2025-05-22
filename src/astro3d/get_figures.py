@@ -19,12 +19,15 @@ from xgboost import XGBClassifier
 MEASUREMENTS = get_core_measurements()
 
 overwrite = False
-profiles_fpath = Path("tmp.parquet")
 figs_path = Path(".") / ".." / ".." / "figs"
+data_path = Path("/") / "datastore" / "alan" / "cp_measure"
 figs_path.parent.mkdir(parents=True, exist_ok=True)
+data_path.parent.mkdir(parents=True, exist_ok=True)
+profiles_fpath = data_path / Path("astro3d_profiles.parquet")
+
 target_feature = "day"
 
-cell_count_col = "Cell Count"
+cell_count_col = "Nuclei Count"
 seed = 42
 
 
@@ -101,44 +104,45 @@ url_hash = {
     "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day7_masks.tar.gz": "63bf6d123ee9505a51fb0ef099ba77223a800babab51756d577cd7cfd8dd182d",
 }
 
-if not profiles_fpath.exists() or overwrite:
-    retrieved = list(
-        Parallel(n_jobs=-1)(
-            delayed(retrieve)(
-                url,
-                processor=Untar(extract_dir=Path(url).name.split(".")[0]),
-                known_hash=h,
-                progressbar=True,
-            )
-            for url, h in url_hash.items()
+retrieved = list(
+    Parallel(n_jobs=-1)(
+        delayed(retrieve)(
+            url,
+            processor=Untar(extract_dir=Path(url).name.split(".")[0]),
+            known_hash=h,
+            progressbar=True,
         )
+        for url, h in url_hash.items()
     )
+)
 
-    dir_files = {
-        x: y
-        for x, y in zip((Path(url).name.split(".")[0] for url in url_hash), retrieved)
-        if x.endswith("_masks")  # Optional but makes the next step faster
-    }
+dir_files = {
+    x: y
+    for x, y in zip((Path(url).name.split(".")[0] for url in url_hash), retrieved)
+    if x.endswith("_masks")  # Optional but makes the next step faster
+}
 
-    pairs = [
-        x
-        for x in Parallel(n_jobs=-1)(
-            delayed(map_mask_to_image)(x) for x in chain(*dir_files.values())
-        )
-        if x is not None  # Ignore pngs
-    ]
+pairs = [
+    x
+    for x in Parallel(n_jobs=-1)(
+        delayed(map_mask_to_image)(x) for x in chain(*dir_files.values())
+    )
+    if x is not None  # Ignore pngs
+]
 
+# %%
+if not profiles_fpath.exists() or overwrite:
     dfs = list(
         Parallel(n_jobs=-1)(
             delayed(apply_measurements)(m_path, i_path) for m_path, i_path in pairs
         )
     )
-
     profiles = pl.concat(dfs)
     profiles.write_parquet(profiles_fpath)
 else:
     profiles = pl.read_parquet(profiles_fpath)
 
+# %%
 filtered = profiles.filter(pl.col("day") == "day7")
 core_df = profiles
 meta = core_df.select(cs.by_dtype(pl.String))
@@ -201,38 +205,51 @@ explainer = shap.TreeExplainer(
 explanation = explainer(Xd)
 shap_values = explanation.values
 # make sure the SHAP values add up to marginal predictions
-np.abs(shap_values.sum(axis=1) + explanation.base_values - pred).max()
+# np.abs(shap_values.sum(axis=1) + explanation.base_values - pred).max)
 plt.close()
-shap.plots.beeswarm(explanation, max_display=6)
-plt.title("Impactful features")
-plt.text(0.4, -0.5, acc, fontweight="bold")
-plt.tight_layout()
-plt.savefig(figs_path / "shap.svg")
-
 # %% example figure
 axd = plt.figure(layout="constrained").subplot_mosaic(
     """
     AC
     BB
-    """
+    """,
 )
 i = 1
 img = imread(pairs[i][1]).max(axis=0)
 labels = imread(pairs[i][0]).max(axis=0)
 
+shap.plots.beeswarm(
+    explanation,
+    max_display=6,
+    ax=axd["B"],
+    plot_size=None,
+    show=False,
+    # color_bar=False,
+)
+axd["B"].set_yticklabels(
+    axd["B"].get_yticklabels(),
+    # rotation=-30,
+    ha="right",
+    rotation_mode="anchor",
+)
 axd["A"].imshow(img)
 axd["A"].axis("off")
 axd["A"].set_title("Z-projected image")
 axd["C"].imshow(labels)
 axd["C"].axis("off")
 axd["C"].set_title("Labels")
-shap.plots.beeswarm(explanation, max_display=6, ax=axd["B"], plot_size=None)
-axd["B"].set_yticklabels(
-    axd["B"].get_yticklabels(),
-    rotation=-30,
-    ha="right",
-    rotation_mode="anchor",
+# plt.text(0.15, -0.5, acc, fontweight="bold")
+from matplotlib.offsetbox import AnchoredText
+
+text_box = AnchoredText(
+    acc,
+    frameon=False,
+    loc=4,
+    prop=dict(fontweight="bold", fontsize=10),
+    borderpad=0,
 )
-plt.text(0.15, -0.5, acc, fontweight="bold")
+
+axd["B"].add_artist(text_box)
+axd["B"].set_aspect(0.15)
 plt.savefig(figs_path / "example_shap.svg")
 plt.close()
