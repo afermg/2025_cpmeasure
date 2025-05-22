@@ -133,13 +133,8 @@ To demonstrate its ease of use and the value of interpretable features, we next 
 
 \begin{figure}[htbp]
 \centering
-\includesvg[width=.9\linewidth]{./figs/example_shap}
-\caption{\label{fig:astrocytes}\textbf{Top panel.} Example pair of astrocyte image and masks. The 3D images were projected over the z-axis, taking the maximum value across the z-stack. \textbf{Bottom panel.} 
-
-SHAP values of the most important features for classifying the day of differentiation (out of three days). 
-Each point represents a single 3D image containing multiple nuclei. 
-Features are ranked by importance, with individual SHAP values shown for the top features and the summed impact shown for the remaining 267 features shown as a single aggregated value. 
-The test data accuracy is shown in bold.}
+\includesvg[width=.9\linewidth]{./figs/example_shap.svg}
+\caption{\label{fig:astrocytes}\textbf{Top panel.} Example pair of astrocyte image and masks. The 3D images were projected over the z-axis, taking the maximum value across the z-stack. \textbf{Bottom panel.} SHAP values of the most important features for classifying the day of differentiation (out of three days). Each point represents a single 3D image containing multiple nuclei. Features are ranked by importance, with individual SHAP values shown for the top features and the summed impact shown for the remaining 267 features shown as a single aggregated value. The test data accuracy is shown in bold.}
 \end{figure}
 
 Figure \ref{fig:astrocytes} shows an example image and its corresponding object masks alongside the Shapley values of a classifier trained on our features. This indicates that the minor axis length of the nuclei is an indicator of phenotypic effect over the course of the experiment, implying that nuclei becomes thicker (though not necessarily more round). Though unsurprising, as we expect astrocyte nuclei to extend over time, by using cp\_measure was able to uncover this with relatively few lines of code.
