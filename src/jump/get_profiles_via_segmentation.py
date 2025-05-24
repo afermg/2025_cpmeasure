@@ -23,7 +23,7 @@ output_dir = Path("/datastore/alan/cp_measure/")
 img_dir = output_dir / "jump_subset"
 mask_dir = output_dir / "jump_masks"
 profiles_dir = output_dir / "profiles"
-for folder in (img_dir, mask_dir, results_dir):
+for folder in (img_dir, mask_dir, profiles_dir):
     folder.mkdir(exist_ok=True, parents=True)
 
 

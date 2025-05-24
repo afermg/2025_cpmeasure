@@ -44,14 +44,16 @@ con = duckdb.connect()
 con.create_function("trim_features", trim_features, [VARCHAR], VARCHAR)
 
 cp_data = pooch.retrieve(
-    "https://zenodo.org/api/records/15498193/files/cellprofiler_analysis.zip/content",
-    known_hash="9ffbde3814cad15b143036a370ada7521a30ba9818baba94e4ff60545b2ced3e",
+    "https://zenodo.org/api/records/15505477/files/cellprofiler_analysis.zip/content",
+    known_hash="1ca6c08955336d15832fc6dc5c15000990f4dd4733e47a06030a416e7ac7a3e9",
     processor=Unzip(),
 )
 
 all_csv_files = [x for x in cp_data if x.endswith("csv")]
 csv_files = {
-    Path(x).stem: x for x in cp_data if Path(x).stem in ("Cells", "Nuclei", "Image")
+    Path(x).stem: x
+    for x in cp_data
+    if Path(x).stem.split("_")[-1] in ("Cells", "Nuclei", "Image")
 }
 
 original_tables_d = {
@@ -59,11 +61,14 @@ original_tables_d = {
     for k, v in csv_files.items()
 }
 # %%
-feature_tables = [v for k, v in original_tables_d.items() if k != "Image"]
+feature_tables = [v for k, v in original_tables_d.items() if not k.endswith("Image")]
 common = set(feature_tables[0].columns)
 for table in feature_tables[1:]:
     common &= set(table.columns)
-orig_profiles = pl.concat([x.select(common) for x in feature_tables])
+orig_profiles = pl.concat([
+    x.select(common).with_columns(pl.col("object").str.strip_prefix("cp_measure_"))
+    for x in feature_tables
+])
 orig_consensus = (
     orig_profiles.group_by("ImageNumber", "object")
     .median()
@@ -84,7 +89,7 @@ orig_unpivot = orig_consensus.unpivot(
 with_parsed = con.sql("SELECT * FROM orig_unpivot NATURAL JOIN parsed")
 
 with_trimmed = con.sql("SELECT *,trim_features(fullname) AS cpm_id FROM with_parsed")
-image_table = original_tables_d["Image"]
+image_table = original_tables_d["cp_measure_Image"]
 imageid_mapper = con.sql(
     "(SELECT ImageNumber,split_part(FileName_OrigDNA, '_', 2) AS site,split_part(FileName_OrigDNA, '_', 1) AS gene FROM image_table)"
 )
@@ -155,23 +160,30 @@ g.map(sns.scatterplot, "CellProfiler", "cp_measure", alpha=0.05)
 g.set_titles(col_template="{col_name}", row_template="{row_name}")
 plt.tight_layout()
 plt.savefig(figs_dir / "grid_cp_vs_cpm.svg")
+plt.savefig(figs_dir / "grid_cp_vs_cpm.png")
 
 # %%
-
-res = pl.concat([
-    x.select(
-        pds.lin_reg_report(
-            *(["CellProfiler"]),
-            target="cp_measure",
-        ).alias("result")
-    )
-    .unnest("result")
-    .with_columns(pl.lit(feat_name).alias("Feature"), pl.lit(obj).alias("object"))
-    .with_columns(pl.col("Feature").replace(mapper).alias("Measurement"))
-    for (feat_name, obj), x in merged.partition_by(
-        ("cpm_id", "object"), as_dict=True
-    ).items()
-])
+partitioned = {
+    k: v.filter(~pl.col("cp_measure").is_nan())
+    for k, v in merged.partition_by("cpm_id", as_dict=True).items()
+}
+dfs = []
+for feat_name, x in partitioned.items():
+    if len(x):
+        dfs.append(
+            x.select(
+                pds.lin_reg_report(
+                    *["CellProfiler"],
+                    target="cp_measure",
+                ).alias("result")
+            )
+            .unnest("result")
+            .with_columns(
+                pl.lit(feat_name[0]).alias("Feature")
+            )  # , pl.lit(obj).alias("object"))
+            .with_columns(pl.col("Feature").replace(mapper).alias("Measurement"))
+        )
+res = pl.concat(dfs)
 # %%
 plt.close()
 feats_to_show = [
@@ -195,7 +207,8 @@ g = sns.swarmplot(
     hue="Measurement",
 )
 
-g.set_ylim(0.989, 1.002)
+# g.set_ylim(0.989, 1.002)
+g.set_ylim(0, 1)
 g.set_title("Linear fit")
 # g.set_xlabel("Individual features")
 g.set_ylabel("R squared")
@@ -230,3 +243,4 @@ for ax_id, featname in zip("ABC", feats_to_show):
 
         sns.move_legend(ax, loc="lower right", bbox_to_anchor=(1.12, 0))
 plt.savefig(figs_dir / "jump_r2_examples.svg")
+plt.savefig(figs_dir / "jump_r2_examples.png")
