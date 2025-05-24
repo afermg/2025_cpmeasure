@@ -31,11 +31,16 @@ def apply_measurements(
 
     img = imread(img_path)
     if img.ndim == 3:
-        flat_img = img.max(axis=0)
-        flat_img = flat_img / flat_img.max()
+        img = img.max(axis=0)
+    # We know that the input data is int16
+    img = (img / 65535).astype(np.float32)
     d = {}
     for meas_name, meas_f in MEASUREMENTS.items():
-        measurements = meas_f(labels, img)
+        if meas_name == "texture":
+            # This has a specific parameter in the data
+            measurements = meas_f(labels, img, scale=15)
+        else:
+            measurements = meas_f(labels, img)
         # Unpack output dictionaries
         for k, v in measurements.items():
             d[k] = v

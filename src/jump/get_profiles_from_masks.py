@@ -3,8 +3,7 @@
 Compare CellProfiler and cp_measure metrics
 """
 
-from concurrent.futures import ThreadPoolExecutor
-from itertools import chain, combinations, groupby, product
+from itertools import chain, groupby, product
 from pathlib import Path
 
 import polars as pl
@@ -21,8 +20,8 @@ def get_mask_name(x):
 
 
 cp_data = pooch.retrieve(
-    "https://zenodo.org/api/records/15426610/files/cellprofiler_analysis.zip/content",
-    known_hash="aef261cf87e5f138ef2dd91b9ed57add1a4d6f997ab14f139c17024f13a610d9",
+    "https://zenodo.org/api/records/15480187/files/cellprofiler_analysis.zip/content",
+    known_hash="42eb17d4b96863815f52764ac6cef5e03f5cd8020697ced7eecca1db7ff25482",
     processor=Unzip(),
 )
 mask_files = [Path(x) for x in cp_data if "masks" in x]
@@ -68,8 +67,8 @@ combs = list(chain(*[list(product(*xy)) for xy in pairs]))
 # Check that shapes match
 for mask, img in combs:
     assert read_labels(mask).shape == imread(img).shape, "error"
-measure_results = Parallel(n_jobs=-1)(
+measure_results_rad = Parallel(n_jobs=100)(
     delayed(apply_measurements)(m, img, get_mask_name(m)) for m, img in tqdm(combs)
 )
-first_set = pl.concat(measure_results)
-first_set.write_parquet(profiles_dir / "first_set.parquet")
+first_set_rad = pl.concat(measure_results_rad)
+first_set_rad.write_parquet(profiles_dir / "first_set.parquet")

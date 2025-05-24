@@ -2,14 +2,13 @@
 """Parse feature names to divide it into its components."""
 
 import re
-from functools import cache
 
 import polars as pl
 
 
 def get_feature_groups(
     feature_fullnames: tuple[str],
-    feature_names: tuple[str] = ("Compartment", "Feature", "Channel", "Suffix"),
+    feature_names: tuple[str] = ("Feature", "Channel", "Suffix"),
 ) -> pl.DataFrame:
     """Group features in a consistent manner using a regex.
 
@@ -32,7 +31,6 @@ def get_feature_groups(
     merging channels where necessary.
 
     """
-    masks = "|".join(("Cells", "Nuclei", "Cytoplasm", "Image", "Object"))
     channels = "|".join((
         "DNA",
         "AGP",
@@ -44,7 +42,7 @@ def get_feature_groups(
     chless_feats = "|".join((
         "AreaShape",
         "Neighbors",
-        "RadialDistribution",
+        # "RadialDistribution",
         "Location",
         "Count",
         "Number",
@@ -54,16 +52,17 @@ def get_feature_groups(
         "Threshold",
     ))
 
-    std = re.compile(rf"({masks})_(\S+)_(Orig)?({channels})(_.*)?")
-    chless = re.compile(f"({masks})_?({chless_feats})_?([a-zA-Z]+)?(.*)?")
-
-    results = [(std.findall(x) or chless.findall(x))[0] for x in feature_fullnames]
+    std = re.compile(rf"(\S+)_(Orig)?({channels})(_.*)?")
+    chless = re.compile(f"({chless_feats})_?([a-zA-Z]+)?(.*)?")
+    results = []
+    for x in feature_fullnames:
+        try:
+            results.append((std.findall(x) or chless.findall(x))[0])
+        except:
+            print(x)
+            raise Exception("failed")
     results = [
-        (
-            (x[0], "".join(x[1:3]), "", x[3])
-            if len(x) < 5
-            else (*x[:2], "".join(x[2:4]), x[4])
-        )
+        (("".join(x[:2]), "", x[2]) if len(x) < 4 else (x[0], "".join(x[1:3]), x[3]))
         for x in results
     ]
 
