@@ -84,6 +84,41 @@
   file = {/home/amunoz/Zotero/storage/PCAUUL3X/Chandrasekaran et al. - 2023 - JUMP Cell Painting dataset morphological impact of 136,000 chemical and genetic perturbations.pdf}
 }
 
+@ARTICLE{Korsunsky2019-Harmony,
+  title     = "Fast, sensitive and accurate integration of single-cell data with
+               Harmony",
+  author    = "Korsunsky, Ilya and Millard, Nghia and Fan, Jean and Slowikowski,
+               Kamil and Zhang, Fan and Wei, Kevin and Baglaenko, Yuriy and
+               Brenner, Michael and Loh, Po-Ru and Raychaudhuri, Soumya",
+  journal   = "Nat. Methods",
+  publisher = "Springer Science and Business Media LLC",
+  volume    =  16,
+  number    =  12,
+  pages     = "1289--1296",
+  abstract  = "The emerging diversity of single-cell RNA-seq datasets allows for
+               the full transcriptional characterization of cell types across a
+               wide variety of biological and clinical conditions. However, it
+               is challenging to analyze them together, particularly when
+               datasets are assayed with different technologies, because
+               biological and technical differences are interspersed. We present
+               Harmony (https://github.com/immunogenomics/harmony), an algorithm
+               that projects cells into a shared embedding in which cells group
+               by cell type rather than dataset-specific conditions. Harmony
+               simultaneously accounts for multiple experimental and biological
+               factors. In six analyses, we demonstrate the superior performance
+               of Harmony to previously published algorithms while requiring
+               fewer computational resources. Harmony enables the integration of
+               ~106 cells on a personal computer. We apply Harmony to peripheral
+               blood mononuclear cells from datasets with large experimental
+               differences, five studies of pancreatic islet cells, mouse
+               embryogenesis datasets and the integration of scRNA-seq with
+               spatial transcriptomics data.",
+  month     =  dec,
+  year      =  2019,
+  language  = "en"
+}
+
+
 @article{chowPredictingDrugPolypharmacology2022,
   title = {Predicting Drug Polypharmacology from Cell Morphology Readouts Using Variational Autoencoder Latent Space Arithmetic},
   author = {Chow, Yuen Ler and Singh, Shantanu and Carpenter, Anne E. and Way, Gregory P.},
@@ -215,6 +250,164 @@
   langid = {english},
   file = {/home/amunoz/Zotero/storage/9CHSCM6R/Kim et al. - 2023 - Self-supervision advances morphological profiling by unlocking powerful image representations.pdf}
 }
+
+@ARTICLE{Xu2024-mn,
+  title     = "A whole-slide foundation model for digital pathology from
+               real-world data",
+  author    = "Xu, Hanwen and Usuyama, Naoto and Bagga, Jaspreet and Zhang,
+               Sheng and Rao, Rajesh and Naumann, Tristan and Wong, Cliff and
+               Gero, Zelalem and González, Javier and Gu, Yu and Xu, Yanbo and
+               Wei, Mu and Wang, Wenhui and Ma, Shuming and Wei, Furu and Yang,
+               Jianwei and Li, Chunyuan and Gao, Jianfeng and Rosemon, Jaylen
+               and Bower, Tucker and Lee, Soohee and Weerasinghe, Roshanthi and
+               Wright, Bill J and Robicsek, Ari and Piening, Brian and Bifulco,
+               Carlo and Wang, Sheng and Poon, Hoifung",
+  journal   = "Nature",
+  publisher = "Springer Science and Business Media LLC",
+  volume    =  630,
+  number    =  8015,
+  pages     = "181--188",
+  abstract  = "Digital pathology poses unique computational challenges, as a
+               standard gigapixel slide may comprise tens of thousands of image
+               tiles1-3. Prior models have often resorted to subsampling a small
+               portion of tiles for each slide, thus missing the important
+               slide-level context4. Here we present Prov-GigaPath, a
+               whole-slide pathology foundation model pretrained on 1.3 billion
+               256 × 256 pathology image tiles in 171,189 whole slides from
+               Providence, a large US health network comprising 28 cancer
+               centres. The slides originated from more than 30,000 patients
+               covering 31 major tissue types. To pretrain Prov-GigaPath, we
+               propose GigaPath, a novel vision transformer architecture for
+               pretraining gigapixel pathology slides. To scale GigaPath for
+               slide-level learning with tens of thousands of image tiles,
+               GigaPath adapts the newly developed LongNet5 method to digital
+               pathology. To evaluate Prov-GigaPath, we construct a digital
+               pathology benchmark comprising 9 cancer subtyping tasks and 17
+               pathomics tasks, using both Providence and TCGA data6. With
+               large-scale pretraining and ultra-large-context modelling,
+               Prov-GigaPath attains state-of-the-art performance on 25 out of
+               26 tasks, with significant improvement over the second-best
+               method on 18 tasks. We further demonstrate the potential of
+               Prov-GigaPath on vision-language pretraining for pathology7,8 by
+               incorporating the pathology reports. In sum, Prov-GigaPath is an
+               open-weight foundation model that achieves state-of-the-art
+               performance on various digital pathology tasks, demonstrating the
+               importance of real-world data and whole-slide modelling.",
+  month     =  jun,
+  year      =  2024,
+  language  = "en"
+}
+
+
+@MISC{10x-Genomics2023-el,
+  title        = "{FFPE} Human Breast with Custom Add-on Panel, In Situ Gene
+                  Expression dataset",
+  author       = "{10x Genomics}",
+  publisher    = "10x Genomics",
+  month        =  jan,
+  year         =  2023,
+  howpublished = "Xenium Onboard Analysis v1.0.2"
+}
+
+
+@ARTICLE{Virshup2023-scverse,
+  title     = "The scverse project provides a computational ecosystem for
+               single-cell omics data analysis",
+  author    = "Virshup, Isaac and Bredikhin, Danila and Heumos, Lukas and Palla,
+               Giovanni and Sturm, Gregor and Gayoso, Adam and Kats, Ilia and
+               Koutrouli, Mikaela and {Scverse Community} and Berger, Bonnie and
+               Pe'er, Dana and Regev, Aviv and Teichmann, Sarah A and Finotello,
+               Francesca and Wolf, F Alexander and Yosef, Nir and Stegle, Oliver
+               and Theis, Fabian J",
+  journal   = "Nat. Biotechnol.",
+  publisher = "Springer Science and Business Media LLC",
+  volume    =  41,
+  number    =  5,
+  pages     = "604--606",
+  month     =  may,
+  year      =  2023,
+  language  = "en"
+}
+
+
+@ARTICLE{Marconato2024-SpatialData,
+  title     = "{SpatialData}: an open and universal data framework for spatial
+               omics",
+  author    = "Marconato, Luca and Palla, Giovanni and Yamauchi, Kevin A and
+               Virshup, Isaac and Heidari, Elyas and Treis, Tim and Vierdag,
+               Wouter-Michiel and Toth, Marcella and Stockhaus, Sonja and
+               Shrestha, Rahul B and Rombaut, Benjamin and Pollaris, Lotte and
+               Lehner, Laurens and Vöhringer, Harald and Kats, Ilia and Saeys,
+               Yvan and Saka, Sinem K and Huber, Wolfgang and Gerstung, Moritz
+               and Moore, Josh and Theis, Fabian J and Stegle, Oliver",
+  journal   = "Nat. Methods",
+  publisher = "Nature Publishing Group",
+  pages     = "1--5",
+  abstract  = "Spatially resolved omics technologies are transforming our
+               understanding of biological tissues. However, the handling of
+               uni- and multimodal spatial omics datasets remains a challenge
+               owing to large data volumes, heterogeneity of data types and the
+               lack of flexible, spatially aware data structures. Here we
+               introduce SpatialData, a framework that establishes a unified and
+               extensible multiplatform file-format, lazy representation of
+               larger-than-memory data, transformations and alignment to common
+               coordinate systems. SpatialData facilitates spatial annotations
+               and cross-modal aggregation and analysis, the utility of which is
+               illustrated in the context of multiple vignettes, including
+               integrative analysis on a multimodal Xenium and Visium breast
+               cancer study.",
+  month     =  mar,
+  year      =  2024,
+  language  = "en"
+}
+
+
+@ARTICLE{Chen2024-ix,
+  title     = "Towards a general-purpose foundation model for computational
+               pathology",
+  author    = "Chen, Richard J and Ding, Tong and Lu, Ming Y and Williamson,
+               Drew F K and Jaume, Guillaume and Song, Andrew H and Chen, Bowen
+               and Zhang, Andrew and Shao, Daniel and Shaban, Muhammad and
+               Williams, Mane and Oldenburg, Lukas and Weishaupt, Luca L and
+               Wang, Judy J and Vaidya, Anurag and Le, Long Phi and Gerber,
+               Georg and Sahai, Sharifa and Williams, Walt and Mahmood, Faisal",
+  journal   = "Nat. Med.",
+  publisher = "Nature Publishing Group",
+  volume    =  30,
+  number    =  3,
+  pages     = "850--862",
+  abstract  = "Quantitative evaluation of tissue images is crucial for
+               computational pathology (CPath) tasks, requiring the objective
+               characterization of histopathological entities from whole-slide
+               images (WSIs). The high resolution of WSIs and the variability of
+               morphological features present significant challenges,
+               complicating the large-scale annotation of data for
+               high-performance applications. To address this challenge, current
+               efforts have proposed the use of pretrained image encoders
+               through transfer learning from natural image datasets or
+               self-supervised learning on publicly available histopathology
+               datasets, but have not been extensively developed and evaluated
+               across diverse tissue types at scale. We introduce UNI, a
+               general-purpose self-supervised model for pathology, pretrained
+               using more than 100 million images from over 100,000 diagnostic
+               H\&E-stained WSIs (>77 TB of data) across 20 major tissue types.
+               The model was evaluated on 34 representative CPath tasks of
+               varying diagnostic difficulty. In addition to outperforming
+               previous state-of-the-art models, we demonstrate new modeling
+               capabilities in CPath such as resolution-agnostic tissue
+               classification, slide classification using few-shot class
+               prototypes, and disease subtyping generalization in classifying
+               up to 108 cancer types in the OncoTree classification system. UNI
+               advances unsupervised representation learning at scale in CPath
+               in terms of both pretraining data and downstream evaluation,
+               enabling data-efficient artificial intelligence models that can
+               generalize and transfer to a wide range of diagnostically
+               challenging tasks and clinical workflows in anatomic pathology.",
+  month     =  mar,
+  year      =  2024,
+  language  = "en"
+}
+
 
 @inproceedings{lafargeCapturingSingleCellPhenotypic2019,
   title = {Capturing {{Single-Cell Phenotypic Variation}} via {{Unsupervised Representation Learning}}},
