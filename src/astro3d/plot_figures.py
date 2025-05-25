@@ -240,7 +240,7 @@ axd["C"].set_yticklabels(
 )
 axd["A"].imshow(img)
 axd["A"].axis("off")
-axd["A"].set_title("Z-projected image")
+axd["A"].set_title("Image")
 axd["B"].imshow(labels)
 axd["B"].axis("off")
 axd["B"].set_title("Labels")
@@ -269,7 +269,9 @@ for ax_id in "AB":
 axd["C"].add_artist(
     generate_label("C", bbox_to_anchor=(-0.98, 1.04), bbox_transform=axd["C"].transAxes)
 )
+font = {"family": "sans-serif", "size": 15}
 axd["C"].set_yticklabels(axd["C"].get_yticklabels(), fontdict=font)
+axd["C"].tick_params(axis="y", which="major", pad=-16)
 axd["C"].set_xlabel(axd["C"].get_xlabel(), fontdict=font)
 plt.savefig(figs_path / "example_shap.svg")
 plt.close()
