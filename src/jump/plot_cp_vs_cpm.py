@@ -206,6 +206,7 @@ g = sns.swarmplot(
     y="r2",
     ax=axd["D"],
     alpha=0.7,
+    palette=sns.color_palette("husl", 8),
     hue="Measurement",
 )
 
@@ -225,8 +226,7 @@ for ax_id, featname in zip("ABC", feats_to_show):
         y="cp_measure",
         hue="object",
         ax=ax,
-        alpha=0.1,
-        palette=sns.color_palette("husl", 8),
+        alpha=0.05,
         legend=None if ax_id != "C" else True,
     )
     # ax.text(0, 0, ax_id, fontsize=9)
