@@ -2,6 +2,7 @@
 from itertools import chain
 from pathlib import Path
 
+import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import polars as pl
@@ -208,7 +209,11 @@ shap_values = explanation.values
 # make sure the SHAP values add up to marginal predictions
 # np.abs(shap_values.sum(axis=1) + explanation.base_values - pred).max)
 plt.close()
-# %% example figure
+# %% Figure 2: Examples and SHAP values
+font = {"family": "sans-serif", "size": 14}
+
+matplotlib.rc("font", **font)
+
 axd = plt.figure(layout="constrained").subplot_mosaic(
     """
     AB
@@ -264,5 +269,7 @@ for ax_id in "AB":
 axd["C"].add_artist(
     generate_label("C", bbox_to_anchor=(-0.98, 1.04), bbox_transform=axd["C"].transAxes)
 )
+axd["C"].set_yticklabels(axd["C"].get_yticklabels(), fontdict=font)
+axd["C"].set_xlabel(axd["C"].get_xlabel(), fontdict=font)
 plt.savefig(figs_path / "example_shap.svg")
 plt.close()

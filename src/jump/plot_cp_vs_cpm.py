@@ -190,7 +190,6 @@ for feat_name, x in partitioned.items():
 res = pl.concat(dfs)
 # %%
 plt.close()
-# font = {"family": "serif", "size": 14}
 font = {"family": "sans-serif", "size": 14}
 
 matplotlib.rc("font", **font)
