@@ -194,9 +194,8 @@ feats_to_show = [
 ]
 axd = plt.figure(layout="constrained").subplot_mosaic(
     """
-    AD
-    BD
-    CD
+    ABC
+    DDD
     """
 )
 g = sns.swarmplot(
@@ -206,13 +205,13 @@ g = sns.swarmplot(
     x="Measurement",
     y="r2",
     ax=axd["D"],
-    alpha=0.8,
+    alpha=0.7,
     hue="Measurement",
 )
 
-g.set_ylim(0.925, 1.009)
+g.set_ylim(0.925, 1.019)
 # g.set_ylim(0, 1)
-g.set_title("Linear fit")
+# g.set_title("Linear fit")
 g.set_ylabel("R squared")
 
 pad = 0.25
@@ -243,6 +242,6 @@ for ax_id, featname in zip("ABC", feats_to_show):
         for lh in ax.get_legend().legend_handles:
             lh.set_alpha(1)
 
-        sns.move_legend(ax, loc="lower right", bbox_to_anchor=(1.12, 0))
+        sns.move_legend(ax, loc="lower right", bbox_to_anchor=(1.2, 0), frameon=False)
 plt.savefig(figs_dir / "jump_r2_examples.svg")
 plt.savefig(figs_dir / "jump_r2_examples.png")
