@@ -191,13 +191,13 @@ res = pl.concat(dfs)
 # %%
 plt.close()
 # font = {"family": "serif", "size": 14}
-font = {"family": "sans-serif", "size": 13}
+font = {"family": "sans-serif", "size": 14}
 
 matplotlib.rc("font", **font)
 
 feats_to_show = [
-    "Area",
     "Intensity_MedianIntensity",
+    "Area",
     "RadialDistribution_RadialCV_1of4",
 ]
 axd = plt.figure(layout="constrained").subplot_mosaic(
