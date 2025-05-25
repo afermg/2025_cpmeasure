@@ -14,6 +14,7 @@ from joblib import Parallel, delayed
 from pooch import Untar, retrieve
 from skimage.io import imread
 from sklearn.model_selection import train_test_split
+from util_plot import generate_label
 from xgboost import XGBClassifier
 
 MEASUREMENTS = get_core_measurements()
@@ -210,8 +211,8 @@ plt.close()
 # %% example figure
 axd = plt.figure(layout="constrained").subplot_mosaic(
     """
-    AC
-    BB
+    AB
+    CC
     """,
 )
 i = 1
@@ -221,13 +222,13 @@ labels = imread(pairs[i][0]).max(axis=0)
 shap.plots.beeswarm(
     explanation,
     max_display=6,
-    ax=axd["B"],
+    ax=axd["C"],
     plot_size=None,
     show=False,
     # color_bar=False,
 )
-axd["B"].set_yticklabels(
-    axd["B"].get_yticklabels(),
+axd["C"].set_yticklabels(
+    axd["C"].get_yticklabels(),
     # rotation=-30,
     ha="right",
     rotation_mode="anchor",
@@ -235,9 +236,9 @@ axd["B"].set_yticklabels(
 axd["A"].imshow(img)
 axd["A"].axis("off")
 axd["A"].set_title("Z-projected image")
-axd["C"].imshow(labels)
-axd["C"].axis("off")
-axd["C"].set_title("Labels")
+axd["B"].imshow(labels)
+axd["B"].axis("off")
+axd["B"].set_title("Labels")
 # plt.text(0.15, -0.5, acc, fontweight="bold")
 from matplotlib.offsetbox import AnchoredText
 
@@ -249,7 +250,19 @@ text_box = AnchoredText(
     borderpad=0,
 )
 
-axd["B"].add_artist(text_box)
-axd["B"].set_aspect(0.15)
+axd["C"].add_artist(text_box)
+
+axd["C"].set_aspect(0.15)
+for ax_id in "AB":
+    axd[ax_id].add_artist(
+        generate_label(
+            ax_id,
+            bbox_to_anchor=(-0.2, 1),
+            bbox_transform=axd[ax_id].transAxes,
+        )
+    )
+axd["C"].add_artist(
+    generate_label("C", bbox_to_anchor=(-0.98, 1.04), bbox_transform=axd["C"].transAxes)
+)
 plt.savefig(figs_path / "example_shap.svg")
 plt.close()
