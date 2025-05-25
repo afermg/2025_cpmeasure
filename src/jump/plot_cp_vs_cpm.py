@@ -144,6 +144,7 @@ merged = con.sql(
 ).pl()
 # %% Plot
 
+# Temporarily ignore granularity
 mpd = merged
 plt.close()
 g = sns.FacetGrid(
@@ -169,7 +170,7 @@ partitioned = {
 }
 dfs = []
 for feat_name, x in partitioned.items():
-    if len(x):
+    if x["cp_measure"].n_unique() > 1 and x["cp_measure"].abs().mean() > 1e-12:
         dfs.append(
             x.select(
                 pds.lin_reg_report(
@@ -199,7 +200,9 @@ axd = plt.figure(layout="constrained").subplot_mosaic(
     """
 )
 g = sns.swarmplot(
-    data=res.sort("Measurement").to_pandas(),
+    data=res.filter(pl.col("Measurement") != "Granularity")
+    .sort("Measurement")
+    .to_pandas(),
     x="Measurement",
     y="r2",
     ax=axd["D"],
@@ -207,10 +210,9 @@ g = sns.swarmplot(
     hue="Measurement",
 )
 
-# g.set_ylim(0.989, 1.002)
-g.set_ylim(0, 1)
+g.set_ylim(0.925, 1.009)
+# g.set_ylim(0, 1)
 g.set_title("Linear fit")
-# g.set_xlabel("Individual features")
 g.set_ylabel("R squared")
 
 pad = 0.25
