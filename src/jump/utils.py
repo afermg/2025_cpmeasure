@@ -4,12 +4,13 @@ import numpy as np
 import polars as pl
 from cp_measure.bulk import (
     get_core_measurements,
-    # get_correlation_measurements,
+    get_correlation_measurements,
     # get_multimask_measurements,
 )
 from skimage.io import imread
 
 MEASUREMENTS = get_core_measurements()
+MEASUREMENTS_2 = get_correlation_measurements()
 
 
 def read_labels(mask_path: Path):
@@ -58,23 +59,27 @@ def get_keys(fpath: Path, n: int = 2) -> tuple[str]:
     return tuple(fpath.stem.split("_")[:n])
 
 
-def apply_measurements_type2(
-    mask_path: Path, pixels1_path: Path, pixels2_path: Path
+def apply_measurements_2(
+    mask_path: Path, pixels1_path: Path, pixels2_path: Path, object_name: str
 ) -> pl.DataFrame:
     labels = read_labels(mask_path)
     pixels1 = imread(pixels1_path)
     pixels2 = imread(pixels2_path)
 
-    for meas_name, meas_f in MEASUREMENTS_TYPE2.items():
-        measurements = meas_f(labels, pixels1, pixels1)
+    d = {}
+    for meas_name, meas_f in MEASUREMENTS_2.items():
+        measurements = meas_f(labels, pixels1, pixels2)
         # Unpack output dictionaries
+        breakpoint()
         for k, v in measurements.items():
             d[k] = v
-            # for k, v in zip(("pert", "day", "stem"), meta):
-            #     d[k] = v
-            d["object"] = mask_path.stem.split("_")[2]
+            d["object"] = object_name
             gene, site, channel1 = pixels1_path.stem.split("_")[:3]
             d["gene"] = gene
             d["site"] = site
             channel2 = pixels2_path.stem.split("_")[2]
             d["channel"] = (channel1, channel2)
+
+    df = pl.from_dict(d)
+
+    return df

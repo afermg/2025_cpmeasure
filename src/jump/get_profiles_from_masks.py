@@ -3,7 +3,7 @@
 Compare CellProfiler and cp_measure metrics
 """
 
-from itertools import chain, groupby, product
+from itertools import chain, combinations, groupby, product
 from pathlib import Path
 
 import polars as pl
@@ -12,7 +12,7 @@ from joblib import Parallel, delayed
 from pooch import Unzip
 from skimage.io import imread
 from tqdm import tqdm
-from utils import apply_measurements, get_keys, read_labels
+from utils import apply_measurements, apply_measurements_2, get_keys, read_labels
 
 
 def get_mask_name(x):
@@ -67,8 +67,28 @@ combs = list(chain(*[list(product(*xy)) for xy in pairs]))
 # Check that shapes match
 for mask, img in combs:
     assert read_labels(mask).shape == imread(img).shape, "error"
-measure_results_rad = Parallel(n_jobs=100)(
-    delayed(apply_measurements)(m, img, get_mask_name(m)) for m, img in tqdm(combs)
-)
-first_set_rad = pl.concat(measure_results_rad)
-first_set_rad.write_parquet(profiles_dir / "first_set.parquet")
+# measure_results = Parallel(n_jobs=100)(
+#     delayed(apply_measurements)(m, img, get_mask_name(m)) for m, img in tqdm(combs)
+# )
+# first_set_rad = pl.concat(measure_results)
+# first_set_rad.write_parquet(profiles_dir / "first_set.parquet")
+
+# %% Type 2
+triads = [  # Triad with mask, img1, img2
+    (mask_ind, *pair_)
+    for masks, channels in pairs
+    for mask_ind, pair_ in product(masks, combinations(channels, 2))
+]
+for m, img1, img2 in triads:
+    shape = try_imread(m).shape
+    assert shape == try_imread(m).shape and shape == try_imread(img2).shape, "error"
+# measure_results = Parallel(n_jobs=100)(
+#     delayed(apply_measurements_2)(m, img1, img2, get_mask_name(m))
+#     for m, img1, img2 in tqdm(triads[:5])
+# )
+# %%
+for m, img1, img2 in tqdm(triads[:5]):
+    tmp = apply_measurements_2(m, img1, img2, get_mask_name(m))
+# measure_results = Parallel(n_jobs=100)(
+#     delayed(apply_measurements_2)(m, img1, img2, get_mask_name(m))
+# )
