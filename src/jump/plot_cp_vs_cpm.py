@@ -7,6 +7,7 @@ Plot the comparison.
 from pathlib import Path
 
 import duckdb
+import matplotlib
 import matplotlib.pyplot as plt
 import polars as pl
 import polars_ds as pds
@@ -20,8 +21,10 @@ from util_names import get_cpm_to_measurement_mapper
 from util_plot import generate_label
 
 figs_dir = Path("..") / ".." / "figs"
+profiles_dir = Path("/") / "datastore" / "alan" / "cp_measure" / "profiles_via_masks"
 
-cpmeasure_parquet = "/datastore/alan/cp_measure/profiles_via_masks/first_set.parquet"
+cpmeasure_parquet = profiles_dir / "first_set.parquet"
+correlation_parquet = profiles_dir / "correlation.parquet"
 
 
 # Turns out it is easier to trim down the CellProfiler measurements
@@ -187,6 +190,11 @@ for feat_name, x in partitioned.items():
 res = pl.concat(dfs)
 # %%
 plt.close()
+# font = {"family": "serif", "size": 14}
+font = {"family": "sans-serif", "size": 13}
+
+matplotlib.rc("font", **font)
+
 feats_to_show = [
     "Area",
     "Intensity_MedianIntensity",
@@ -210,10 +218,10 @@ g = sns.swarmplot(
     hue="Measurement",
 )
 
-g.set_ylim(0.925, 1.019)
+g.set_ylim(0.925, 1.021)
 # g.set_ylim(0, 1)
 # g.set_title("Linear fit")
-g.set_ylabel("R squared")
+g.set_ylabel(r"$R^2$")
 
 pad = 0.25
 axd["D"].add_artist(generate_label("D", pad=pad))
@@ -233,6 +241,11 @@ for ax_id, featname in zip("ABC", feats_to_show):
     h.set_yticklabels(
         h.get_yticklabels(), rotation=30, ha="right", rotation_mode="anchor"
     )
+    h.set_xticklabels(
+        h.get_xticklabels(), rotation=30, ha="right", rotation_mode="anchor"
+    )
+    if ax_id != "A":
+        ax.set_ylabel("")
     featname = featname.removeprefix("RadialDistribution_")
     featname = featname.removeprefix("Intensity_")
     ax.set_title(featname.replace("_", " "))
@@ -242,6 +255,13 @@ for ax_id, featname in zip("ABC", feats_to_show):
         for lh in ax.get_legend().legend_handles:
             lh.set_alpha(1)
 
-        sns.move_legend(ax, loc="lower right", bbox_to_anchor=(1.2, 0), frameon=False)
+        sns.move_legend(
+            ax,
+            loc="lower right",
+            bbox_to_anchor=(1.5, 0),
+            frameon=False,
+            bbox_transform=ax.transAxes,
+            handletextpad=-0.5,
+        )
 plt.savefig(figs_dir / "jump_r2_examples.svg")
 plt.savefig(figs_dir / "jump_r2_examples.png")
