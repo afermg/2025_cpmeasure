@@ -165,18 +165,18 @@ These results indicate that cp\_measure is not likely to produce massively diffe
 
 We demonstrate cp\_measure's utility through a biologically relevant task: tracking astrocyte maturation over time. 
 From 433 3D images containing 831 astrocyte nuclei \citep{kalininValproicAcidinducedChanges2021}, cp\_measure extracted morphological features  that we preprocessed following standard procedures \citep{caicedoDataanalysisStrategiesImagebased2017}.
-We then traind a Gradient Boosting classifier to predict the day of cell differentiation with 87\% accuracy. 
+We then trained a Gradient Boosting classifier to predict the day of cell differentiation with 87\% accuracy. 
 SHAP analysis \citep{sundararajanManyShapleyValues2020} (\ref{fig:astrocytes}) revealed that nuclear minor axis length was the most predictive feature: nuclei became progressively wider during maturation, a phenotype consistent with known astrocyte biology.
 
 \begin{figure}[htbp]
 \centering
 \includesvg[width=.9\linewidth]{./figs/example_shap.svg}
-\caption{\label{fig:astrocytes}\textbf{Panels A and B.} Example pair of astrocyte nuclei image and masks. The 3D images were projected over the z-axis, taking the maximum value across the z-stack. \textbf{Panel C.} SHAP values of the most important features for classifying the day of differentiation (out of three days). Each point represents a single 3D image containing multiple nuclei, the magnitude of SHAP values indicate how important those features are for the classifier. Features are ranked by importance, with individual SHAP values shown for the top features and the summed impact shown for the remaining 267 features shown as a single aggregated value. Shape features refer to the nucleus and intensity features refer to the DNA staining. The test data accuracy is shown in bold.}
+\caption{\label{fig:astrocytes}\textbf{Panels A and B.} Example pair of astrocyte nuclei image and masks. The 3D images were projected over the z-axis, taking the maximum value across the z-stack. \textbf{Panel C.} SHAP values of the most important features for classifying the day of differentiation (out of three days). Each point represents a single 3D image containing multiple nuclei, the magnitude of SHAP values indicate how important those features are for the classifier. Features are ranked by importance, with individual SHAP values shown for the top features and the summed impact shown for the remaining 267 features shown as a single aggregated value. Shape features, such as the minor axis length, refer to the nucleus, while intensity features refer to the DNA staining. The test data accuracy is shown in bold.}
 \end{figure}
 
 \subsubsection{Spatial transcriptomics}
 \label{sec:org5711d86}
-To demonstrate the broad applicability of cp\_measure, we developed a morphology featurizer with it at its core for the popular spatial omics analysis toolbox Squidpy \citep{pallaSquidpyScalableFramework2022}.
+To demonstrate the broad applicability of cp\_measure, we developed a morphology featurizer for the popular spatial omics analysis toolbox Squidpy \citep{pallaSquidpyScalableFramework2022}.
 Many of the recently developed spatial omics analysis technologies generate, in addition to their target omics layer, imaging data, usually H\&E (hematoxylin and eosin) stained or fluorescently labelled. 
 
 % Using CellProfiler on spatial datasets is not convenient due to its enforcement of a nested structure on input data and, since it requires loading entire images into RAM, struggles. Since images from spatial datasets contain thousands of times more cells than conventional microscopy data, usually reaching 500.000 cells per image, the stand-alone nature of cp\_measure allowed us to tailor a workflow to match this data throughput. We used Squidpy to leverage the SpatialData data format \citep{Marconato2024-SpatialData}, enabling us to parallelize the feature extraction with cp\_measure to streaming batches of individual cells across multiple processing cores. This approach enables efficient computation on large-scale datasets, which would be intractable using CellProfiler. Furthermore, this brings morphological profiling into the single-cell -- scverse -- ecosystem \citep{Virshup2023-scverse}, exposing it to the wider single-cell community.
@@ -193,7 +193,7 @@ For each cluster, we extracted the cells within its hexagons and calculated the 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.99\linewidth]{./figs/fig_4_spatial.png}
-\caption{\label{fig:spatial_omics}{}Morphology reveals the composition of tumour subregions. \textbf{Panel A.} Spatial map of cell types inferred from transcriptomics. \textbf{Panel B.} Morphological subregions obtained by applying Leiden clustering to image-derived feature embeddings. \textbf{Panel C.} Bar chart showing, for each morphological cluster, the fraction of cells assigned to each cell type (colour legend as shown). The top left quarter of the image shows that the morphological approach worked to predict regions while the expression annotations did not.}
+\caption{\label{fig:spatial_omics}{}Morphology reveals the composition of tumour subregions. \textbf{Panel A.} Spatial map of cell types inferred from transcriptomics. \textbf{Panel B.} Morphological subregions obtained by applying Leiden clustering to image-derived feature embeddings. \textbf{Panel C.} Bar chart showing, for each morphological cluster, the fraction of cells assigned to each cell type (colour legend as shown). The top left quarter of Panel A shows that the morphological approach worked to predict regions while the expression annotations did not.}
 \end{figure}
 
 These results demonstrate how cp\_measure can can be used outside traditional microscopy. When applied on extremely large images it produces biologically meaningful morphological clusters that validate and complement transcriptomic phenotypes. By embedding this capability within the scverse ecosystem via Squidpy, we enable researchers to seamlessly add morphology to their spatial omics workflows, unlocking new insights into tissue organization and cell–cell interactions.
@@ -204,8 +204,7 @@ While point-and-click interfaces open the world of image analysis to many resear
 
 The biologically interpretable features provided by cp\_measure complement deep learning features and offer a better mechanistic understanding of the underlying biology. A potential workflow would be to use deep learning features to cluster and then use cp\_measure features from these clusters. As a whole, when used in tandem with generalist image-processing tools, such as Cellpose for segmentation \cite{stringerCellposeGeneralistAlgorithm2021}, machine and deep learning workflows can be streamlined. 
 
-% Already, CellProfiler features have been used in multiple experiments, including in non-biological contexts such as environmental monitoring \citep{ideharaExploringNileRed2025}. By association, we foresee cp\_measure being useful for a broad scientific community beyond image-based profiling.
-While developed for biology, engineered morphological features have proven valuable far beyond their original domain—from analyzing microplastics in environmental samples \citep{ideharaExploringNileRed2025} to quality control in manufacturing CITE SOMETHING. 
+While developed for biology, engineered morphological features have proven valuable far beyond their original domain--from analysing microplastics in environmental samples \citep{ideharaExploringNileRed2025} to quality control in manufacturing CITE SOMETHING and agricultural automation \citep{xuDesignNonDestructiveSeed2024}. 
 cp\_measure's lightweight, API-first design makes these powerful features accessible to any field working with image data, removing the barriers of biological-specific interfaces.
 
 \section{Future work}
@@ -216,7 +215,10 @@ We also plan to develop a comprehensive test suite to guarantee mathematical cor
 
 \bibliographystyle{icml2025}
 \bibliography{bibliography}
+
+\onecolumn
 \section{Appendix}
+
 \label{sec:orgdd18dd8}
 \subsection{Methods}
 \label{sec:orgb3e9382}
@@ -225,6 +227,11 @@ We also plan to develop a comprehensive test suite to guarantee mathematical cor
 The codebase for cp\_measure is available on \url{https://anonymous.4open.science/r/cp\_measure-B0DA}. All code to reproduce the analyses and figures, alongside links to the original data, is available on the GitHub repository \url{https://anonymous.4open.science/r/2025_cpmeasure-3FBF}. 
 %The datasets we produced for this work are available on Zenodo. The selection of samples from JUMP and the images can be found on \url{https://zenodo.org/records/15390631/latest}. The image-based profiles produced with Cellprofiler and used for the comparisons in Figure 2 can be on \url{https://zenodo.org/records/15505477/latest}.
 % 
+
+\subsubsection{Details on the spatial use case}
+\label{sec:spatial_extra}
+
+
 \subsubsection{Acknowledgements}
 \label{sec:acknowledgements}
 
