@@ -124,7 +124,9 @@ retrieved = list(
     Parallel(n_jobs=-1)(
         delayed(retrieve)(
             url,
-            processor=Untar(extract_dir=Path(url).name.split(".")[0]),
+            processor=Untar(
+                extract_dir=Path(url.removesuffix("/content")).name.split(".")[0]
+            ),
             known_hash=h,
             progressbar=True,
         )
