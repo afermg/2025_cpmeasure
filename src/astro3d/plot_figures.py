@@ -92,19 +92,33 @@ def map_mask_to_image(fpath: Path) -> tuple[str, str] or None:
 
 
 url_hash = {
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day3_deconv.tar.gz": "6d1fd24d7f9381e1aa4f95dbc9c2c351c7633a3a4500d95b4a6736d40b4100af",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day3_masks.tar.gz": "d428491b3bc8207bedf77f33afdde5e6542ea6c4f9f63e0cf920f46b6f68f43b",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day5_deconv.tar.gz": "f7c7f93d1a173441f8b116ca8411df524678d926ed30d490d580d01edd782503",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day5_masks.tar.gz": "ddbf48a883f03ab89c3adf11cbf4b1e07905f8deb734502f38b684bb009e900b",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day7_deconv.tar.gz": "9dd69934f306cab31e94df427ee7618d21c32038a62a14ccab15b7d3517eadf7",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day7_masks.tar.gz": "55aafc7b49f904f711187a85ef0bf5e410d3e6aef4b0b7bf69ef17fce51ee8b6",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day3_deconv.tar.gz": "2e1637fd0f240fda6b19ea7d57668ce6b82ae35f697fa2af9b30fc6915d609b5",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day3_masks.tar.gz": "e47c7b476f1328f79f4d6825c74706fc7e5504ca3eed7d41caa7199b3d001690",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day5_deconv.tar.gz": "08c7278e4c1a61fa77b8c196e79bcd5e222241ff05b492d13a18a9f976c81cf3",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day5_masks.tar.gz": "366293f5e68247e927628b6b2e8a8c33338de9a56db9f269e7fb6a0500dbb55b",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day7_deconv.tar.gz": "022e8d8d086e65551d1fabf8048bbf0fe0a6fbe9015bdc6a6191227730ad8408",
-    "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day7_masks.tar.gz": "63bf6d123ee9505a51fb0ef099ba77223a800babab51756d577cd7cfd8dd182d",
+    "https://zenodo.org/api/records/15594999/files/nha_day3_deconv.tar.gz/content": "6d1fd24d7f9381e1aa4f95dbc9c2c351c7633a3a4500d95b4a6736d40b4100af",
+    "https://zenodo.org/api/records/15594999/files/nha_day3_masks.tar.gz/content": "d428491b3bc8207bedf77f33afdde5e6542ea6c4f9f63e0cf920f46b6f68f43b",
+    "https://zenodo.org/api/records/15594999/files/nha_day5_deconv.tar.gz/content": "f7c7f93d1a173441f8b116ca8411df524678d926ed30d490d580d01edd782503",
+    "https://zenodo.org/api/records/15594999/files/nha_day5_masks.tar.gz/content": "ddbf48a883f03ab89c3adf11cbf4b1e07905f8deb734502f38b684bb009e900b",
+    "https://zenodo.org/api/records/15594999/files/nha_day7_deconv.tar.gz/content": "9dd69934f306cab31e94df427ee7618d21c32038a62a14ccab15b7d3517eadf7",
+    "https://zenodo.org/api/records/15594999/files/nha_day7_masks.tar.gz/content": "55aafc7b49f904f711187a85ef0bf5e410d3e6aef4b0b7bf69ef17fce51ee8b6",
+    "https://zenodo.org/api/records/15594999/files/vpa_day3_deconv.tar.gz/content": "2e1637fd0f240fda6b19ea7d57668ce6b82ae35f697fa2af9b30fc6915d609b5",
+    "https://zenodo.org/api/records/15594999/files/vpa_day3_masks.tar.gz/content": "e47c7b476f1328f79f4d6825c74706fc7e5504ca3eed7d41caa7199b3d001690",
+    "https://zenodo.org/api/records/15594999/files/vpa_day5_deconv.tar.gz/content": "08c7278e4c1a61fa77b8c196e79bcd5e222241ff05b492d13a18a9f976c81cf3",
+    "https://zenodo.org/api/records/15594999/files/vpa_day5_masks.tar.gz/content": "366293f5e68247e927628b6b2e8a8c33338de9a56db9f269e7fb6a0500dbb55b",
+    "https://zenodo.org/api/records/15594999/files/vpa_day7_deconv.tar.gz/content": "022e8d8d086e65551d1fabf8048bbf0fe0a6fbe9015bdc6a6191227730ad8408",
+    "https://zenodo.org/api/records/15594999/files/vpa_day7_masks.tar.gz/content": "63bf6d123ee9505a51fb0ef099ba77223a800babab51756d577cd7cfd8dd182d",
 }
+
+# Original locations:
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day3_deconv.tar.gz": "6d1fd24d7f9381e1aa4f95dbc9c2c351c7633a3a4500d95b4a6736d40b4100af",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day3_masks.tar.gz": "d428491b3bc8207bedf77f33afdde5e6542ea6c4f9f63e0cf920f46b6f68f43b",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day5_deconv.tar.gz": "f7c7f93d1a173441f8b116ca8411df524678d926ed30d490d580d01edd782503",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day5_masks.tar.gz": "ddbf48a883f03ab89c3adf11cbf4b1e07905f8deb734502f38b684bb009e900b",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day7_deconv.tar.gz": "9dd69934f306cab31e94df427ee7618d21c32038a62a14ccab15b7d3517eadf7",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/nha_day7_masks.tar.gz": "55aafc7b49f904f711187a85ef0bf5e410d3e6aef4b0b7bf69ef17fce51ee8b6",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day3_deconv.tar.gz": "2e1637fd0f240fda6b19ea7d57668ce6b82ae35f697fa2af9b30fc6915d609b5",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day3_masks.tar.gz": "e47c7b476f1328f79f4d6825c74706fc7e5504ca3eed7d41caa7199b3d001690",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day5_deconv.tar.gz": "08c7278e4c1a61fa77b8c196e79bcd5e222241ff05b492d13a18a9f976c81cf3",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day5_masks.tar.gz": "366293f5e68247e927628b6b2e8a8c33338de9a56db9f269e7fb6a0500dbb55b",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day7_deconv.tar.gz": "022e8d8d086e65551d1fabf8048bbf0fe0a6fbe9015bdc6a6191227730ad8408",
+# "https://www.socr.umich.edu/data/3d-cell-morphometry-data/vpa_day7_masks.tar.gz": "63bf6d123ee9505a51fb0ef099ba77223a800babab51756d577cd7cfd8dd182d",
 
 retrieved = list(
     Parallel(n_jobs=-1)(
@@ -120,7 +134,10 @@ retrieved = list(
 
 dir_files = {
     x: y
-    for x, y in zip((Path(url).name.split(".")[0] for url in url_hash), retrieved)
+    for x, y in zip(
+        (Path(url.removesuffix("/content")).name.split(".")[0] for url in url_hash),
+        retrieved,
+    )
     if x.endswith("_masks")  # Optional but makes the next step faster
 }
 
