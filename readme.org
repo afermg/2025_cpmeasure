@@ -1,7 +1,6 @@
 #+TITLE: Paper draft to publish cp_measure-related work
 #+OPTIONS: ^:nil
-
-*** Repo contents:
+** Repo contents:
 - draft.org: main draft of the paper
 - bib file with citations
 - Some sty files required by CodeML
@@ -11,3 +10,12 @@
 **** For reproducibility:
   - flake.{nix,lock}: Contains emacs and uv dependencies for Python figure generation and emacs-based org->tex->PDF
   - =src=: code content. If applicable dependencies will be inside folders within a pyproject.toml or in the header of a script to be run with =uv run --script= 
+
+** Regenerate pdfs
+#+begin_src bash
+  nix develop .
+  # Manually
+  latexmk -xelatex -shell-escape -quiet draft.tex # appendix.tex
+  # make (via emacs):
+  #make
+#+end_src
