@@ -47,8 +47,7 @@ def try_imread(x):
 img_paths = sorted(list(img_dir.rglob("*.tif")))
 
 
-# %%
-# Organize masks
+# %% Get type 1 measurements
 
 # We pair the mask names with their associated images
 
@@ -67,11 +66,12 @@ combs = list(chain(*[list(product(*xy)) for xy in pairs]))
 # Check that shapes match
 for mask, img in combs:
     assert read_labels(mask).shape == imread(img).shape, "error"
-# measure_results = Parallel(n_jobs=100)(
-#     delayed(apply_measurements)(m, img, get_mask_name(m)) for m, img in tqdm(combs)
-# )
-# first_set_rad = pl.concat(measure_results)
-# first_set_rad.write_parquet(profiles_dir / "first_set.parquet")
+
+measure_results = Parallel(n_jobs=100)(
+    delayed(apply_measurements)(m, img, get_mask_name(m)) for m, img in tqdm(combs)
+)
+first_set_rad = pl.concat(measure_results)
+first_set_rad.write_parquet(profiles_dir / "first_set.parquet")
 
 # %% Type 2
 triads = [  # Triad with mask, img1, img2
