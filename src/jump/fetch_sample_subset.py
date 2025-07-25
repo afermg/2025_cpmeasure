@@ -12,8 +12,7 @@ from pathlib import Path
 import polars as pl
 from joblib import Parallel, delayed
 from jump_portrait.fetch import get_item_location_info
-from jump_portrait.s3 import get_image_from_s3uri
-from PIL import Image
+from skimage.io import imread
 from tqdm import tqdm
 
 out_dir = Path("/datastore/alan/cp_measure/jump_subset")
@@ -57,7 +56,7 @@ images_df = orig.unpivot(
 
 n_meta_cols = len(meta_cols)
 
-images_df.write_parquet(out_dir / "image_index.parquet")
+# Save index of images that maps to original files
 images_df.write_parquet(out_dir / ".." / "to_upload" / "image_index.parquet")
 
 
@@ -67,7 +66,6 @@ def download_save(row: tuple[str, str, str, str]):
 
 # Validate
 
-from skimage.io import imread
 
 for shape in (1080, 1280):
     fpath = Path(f"/datastore/alan/cp_measure/jump_subset/shape_{shape}/")

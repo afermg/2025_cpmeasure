@@ -29,7 +29,7 @@ mask_files = [Path(x) for x in cp_data if "masks" in x]
 
 out_dir = Path("/datastore/alan/cp_measure/")
 img_dir = out_dir / "jump_subset"
-profiles_dir = out_dir / "profiles_via_masks"
+profiles_dir = out_dir / "to_upload"
 for folder in (img_dir, profiles_dir):
     folder.mkdir(exist_ok=True, parents=True)
 
@@ -71,7 +71,7 @@ measure_results = Parallel(n_jobs=100)(
     delayed(apply_measurements)(m, img, get_mask_name(m)) for m, img in tqdm(combs)
 )
 first_set_rad = pl.concat(measure_results)
-first_set_rad.write_parquet(profiles_dir / "first_set.parquet")
+first_set_rad.write_parquet(profiles_dir / "cpm_profiles_type1.parquet")
 
 # %% Type 2
 triads = [  # Triad with mask, img1, img2
@@ -82,13 +82,16 @@ triads = [  # Triad with mask, img1, img2
 for m, img1, img2 in triads:
     shape = try_imread(m).shape
     assert shape == try_imread(m).shape and shape == try_imread(img2).shape, "error"
-# measure_results = Parallel(n_jobs=100)(
-#     delayed(apply_measurements_2)(m, img1, img2, get_mask_name(m))
-#     for m, img1, img2 in tqdm(triads[:5])
-# )
-# %%
-for m, img1, img2 in tqdm(triads[:5]):
-    tmp = apply_measurements_2(m, img1, img2, get_mask_name(m))
+measure_results = Parallel(n_jobs=100)(
+    delayed(apply_measurements_2)(m, img1, img2, get_mask_name(m))
+    for m, img1, img2 in tqdm(triads)
+)
+first_set_rad = pl.concat(measure_results)
+first_set_rad.write_parquet(profiles_dir / "cpm_profiles_type2.parquet")
+
+# %% To debug
+# for m, img1, img2 in tqdm(triads[:5]):
+#     tmp = apply_measurements_2(m, img1, img2, get_mask_name(m))
 # measure_results = Parallel(n_jobs=100)(
 #     delayed(apply_measurements_2)(m, img1, img2, get_mask_name(m))
 # )
