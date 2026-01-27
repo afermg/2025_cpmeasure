@@ -1,3 +1,5 @@
+"""Utility that maps CellProfiler feature names to their corresponding measurement."""
+
 from itertools import product
 
 
