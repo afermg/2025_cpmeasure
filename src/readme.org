@@ -4,3 +4,10 @@
 - Figure 2: jump/plot_cp_vs_cpm.py
 - Figure 3: astro3d/plot_figures.py
 - Figure 4: This figure was produced in a separate environment by Tim Treis from the Theis lab.
+
+* Batch upload to Zenodo
+Place all the outputs and compressed figures into a (non-nested) directory.
+#+begin_src bash
+  set -x ZENODO_TOKEN XXXXX/datastore/alan/cp_measure/metadata/cp_measure.json # I use fish, use  use export ZENODO_TOKEN="..." if using bash
+  bash zenodo_upload.sh "" zenodo_upload_metadata.json /datastore/alan/cp_measure/to_upload/
+#+end_src
