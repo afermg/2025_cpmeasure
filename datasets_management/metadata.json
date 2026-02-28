@@ -5,7 +5,7 @@
             "name": "Alán F. Muñoz"
         }
     ],
-    "description": "Images, masks and dataframes to replicate the results of a CellProfiler pipeline. This data is intended to be used for evaluating the fidelity of cp_measure features relative to CellProfiler and optimize the former.\n\nFiles included:\n- `cellprofiler_data.parquet`: CellProfiler feature outputs including object, feature, channel, and values.\n- `cpm_cellprofiler_joint.parquet`: Joint dataset comparing cp_measure (`cp_measure` column) and CellProfiler (`CellProfiler` column) results.\n- `image_index.parquet`: Index file containing metadata for images (Source, Batch, Plate, Well, Site, etc.).\n- `images.tar.gz`: Archive containing the source TIFF images.\n- `masks.tar.gz`: Archive containing segmentation masks in NPZ format.",
+    "description": "<p>Images, masks and dataframes to replicate the results of a CellProfiler pipeline. This data is intended to be used for evaluating the fidelity of cp_measure features relative to CellProfiler and optimize the former.<br><br>Files included:<br>- `cellprofiler_data.parquet`: CellProfiler feature outputs including object, feature, channel, and values.<br>- `cpm_cellprofiler_joint.parquet`: Joint dataset comparing cp_measure (`cp_measure` column) and CellProfiler (`CellProfiler` column) results.<br>- `image_index.parquet`: Index file containing metadata for images (Source, Batch, Plate, Well, Site, etc.).<br>- `images.tar.gz`: Archive containing the source TIFF images.<br>- `masks.tar.gz`: Archive containing segmentation masks in NPZ format.<p>",
     "upload_type": "dataset",
     "access_right": "open"
 }}
